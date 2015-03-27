@@ -1,6 +1,7 @@
 ﻿package
 {
 	import flash.display.Sprite;
+	import flash.events.*;
 	
 	public class StartScene extends Sprite
 	{
@@ -26,7 +27,7 @@
 		}
 		
 		
-		private function startGame(event:MouseEvent)
+		/*private function startGame(event:MouseEvent)
 		{
 			_gameState.gameScene();
 		}
@@ -34,6 +35,6 @@
 		private function quitGame(event:MouseEvent)
 		{
 			_gameState.quitGame();
-		}
+		}*/
 	}
 }

@@ -1,6 +1,7 @@
 package
 {
 	import flash.display.Sprite;
+	import flash.display.Bitmap;
 	import flash.system.*;
 	
 	public class GameState extends Sprite
@@ -11,7 +12,7 @@ package
 		
 		public function GameState()
 		{
-			homeScene();
+			startScene();
 		}
 		
 		private function homeScene()
@@ -28,8 +29,8 @@ package
 		
 		private function startScene()
 		{
-			// TODO Auto Generated method stub
-			
+			_startScene = new StartScene(this);
+			addChild(_startScene);
 		}
 	}
 }
