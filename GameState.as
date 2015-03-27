@@ -1,6 +1,5 @@
 package
 {
-	import flash.display.Stage
 	import flash.display.Sprite;
 	import flash.system.*;
 	
@@ -17,7 +16,7 @@ package
 		
 		private function homeScene()
 		{
-			_homeScene = new HomeScene(this, stage);
+			_homeScene = new HomeScene(this);
 			addChild(_homeScene);
 		}
 		
