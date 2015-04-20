@@ -1,5 +1,6 @@
 package
 {
+	import flash.display.Stage;
 	import flash.display.Sprite;
 	import flash.display.Bitmap;
 	import flash.system.*;
@@ -12,12 +13,12 @@ package
 		
 		public function GameState()
 		{
-			startScene();
+			homeScene();
 		}
 		
 		private function homeScene()
 		{
-			_homeScene = new HomeScene(this);
+			_homeScene = new HomeScene(this, stage);
 			addChild(_homeScene);
 		}
 		
