@@ -1,9 +1,14 @@
 package
 {
+<<<<<<< HEAD
 	import flash.display.*;
 	/*import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.display.Stage;*/
+=======
+	import flash.display.Sprite;
+	import flash.display.Stage;
+>>>>>>> origin/master
 	import flash.events.*;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
@@ -12,15 +17,21 @@ package
 	public class HomeScene extends MovieClip
 	{
 		private var _gameState:GameState;
+<<<<<<< HEAD
 		private var stageRef:Stage;
 		private var _player:Player;
 		public static var objects:Array = new Array();
 		/*private var _drawer1:Sprite = new Drawer;
+=======
+		public var _player:Object;
+		private var _drawer1:Sprite = new Drawer;
+>>>>>>> origin/master
 		private var _drawer2:Sprite = new Drawer;
 		private var _drawer3:Sprite = new Drawer;
 		private var _drawer4:Sprite = new Drawer;
 		private var _cabinet1:Sprite = new CabinetDoor;
 		private var _cabinet2:Sprite = new CabinetDoor;
+<<<<<<< HEAD
 		private var _door:Sprite = new Door;*/
 		
 		public function HomeScene(passedClass:GameState, stageRef:Stage)
@@ -36,6 +47,17 @@ package
 			_player.x = 720;
 			_player.y = 170;
 			addChild(_player);
+=======
+		private var _door:Sprite = new Door;
+		
+		public function HomeScene(passedClass:GameState, stageRef:Stage)
+		{
+			
+			_gameState = passedClass;
+			makeRoom();
+			_player = new Player(stageRef);
+			
+>>>>>>> origin/master
 		}
 
 		private function makeRoom()
