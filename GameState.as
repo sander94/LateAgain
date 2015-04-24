@@ -10,6 +10,7 @@ package
 		private var _startScene:StartScene;
 		private var _endScene:EndScene;
 		private var _homeScene:HomeScene;
+		private var _spaceScene:SpaceScene;
 		
 		public function GameState()
 		{
