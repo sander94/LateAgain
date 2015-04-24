@@ -1,9 +1,7 @@
 package
 {
 	import HomeScene;
-	
 	import KeyObject;
-	
 	import flash.display.*;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
@@ -11,6 +9,7 @@ package
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
+	import flash.utils.Timer;
 	
 	public class Player extends MovieClip
 	{
@@ -26,6 +25,14 @@ package
 		private var hitRight:Point = new Point;
 		private var hitUp:Point = new Point;
 		private var hitDown:Point = new Point;
+		private var downStop:String = "down_stop";
+		private var downWalk:String = "down_walk";
+		private var upStop:String = "up_stop";
+		private var upWalk:String = "up_walk";
+		private var leftStop:String = "left_stop";
+		private var leftWalk:String = "left_walk";
+		private var rightStop:String = "right_stop";
+		private var rightWalk:String = "right_walk";
 		
 		public function Player(stageRef:Stage)
 		{
@@ -185,6 +192,8 @@ package
 			
 			if (key.isDown(key.LEFT) || key.isDown(key.A))
 			{
+				PlayerAnimation(leftWalk, true)
+				
 				if (_leftCollision)
 				{
 					trace("Left is Blocked")
@@ -196,11 +205,13 @@ package
 					hitUp.x -= speed;
 					hitLeft.x -= speed;
 					hitRight.x -= speed;
-					this.rotation = -90;
+					//this.rotation = -90;
 				}
 			}
 			if (key.isDown(key.RIGHT) || key.isDown(key.D))
 			{
+				PlayerAnimation(rightWalk, true)
+				
 				if (_rightCollision)
 				{
 					trace("Right is Blocked")
@@ -212,11 +223,13 @@ package
 					hitUp.x += speed;
 					hitLeft.x += speed;
 					hitRight.x += speed;
-					this.rotation = 90;
+					//this.rotation = 90;
 				}
 			}
 			if (key.isDown(key.UP) || key.isDown(key.W))
 			{
+				PlayerAnimation(upWalk, true)
+				
 				if (_upCollision)
 				{
 					trace("Up is Blocked")
@@ -228,11 +241,13 @@ package
 					hitUp.y -= speed;
 					hitLeft.y -= speed;
 					hitRight.y -= speed;
-					this.rotation = 0;
+					//this.rotation = 0;
 				}
 			}
 			if (key.isDown(key.DOWN) || key.isDown(key.S))
 			{
+				PlayerAnimation(downWalk, true)
+				
 				if(_downCollision)
 				{
 					trace("Down is Blocked")
@@ -244,10 +259,10 @@ package
 					hitUp.y += speed;
 					hitLeft.y += speed;
 					hitRight.y += speed;
-					this.rotation = 180;
+					//this.rotation = 180;
 				}
 			}
-			if ((key.isDown(key.LEFT) || key.isDown(key.A)) && (key.isDown(key.UP) || key.isDown(key.W)))
+			/*if ((key.isDown(key.LEFT) || key.isDown(key.A)) && (key.isDown(key.UP) || key.isDown(key.W)))
 			{
 				this.rotation = -45;
 			}
@@ -262,8 +277,16 @@ package
 			if ((key.isDown(key.RIGHT) || key.isDown(key.D)) && (key.isDown(key.DOWN) || key.isDown(key.S)))
 			{
 				this.rotation = 135;
+			}*/
+		}
+		public function PlayerAnimation(label:String, play:Boolean=false):void
+		{ 
+			if( play ){
+				gotoAndPlay(label);
+			}else{
+				gotoAndStop(label);
 			}
 		}
-
+		
 	}
 }
