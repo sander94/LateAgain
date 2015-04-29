@@ -4,7 +4,7 @@
 	import flash.events.*;
 	import flash.system.*;
 	
-	public class StartScene extends Sprite
+	public class StartScene extends MovieClip
 	{
 
 		private var _gameState:GameState;

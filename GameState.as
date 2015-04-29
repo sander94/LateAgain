@@ -11,22 +11,22 @@ package
 		
 		public function GameState()
 		{
-			startScene();
-			//homeScene();
+			//startScene();
+			homeScene();
 		}
 		
 		public function startScene()
 		{
+			if(_homeScene)
+			{
+				removeChild(_homeScene);
+			}
 			_startScene = new StartScene(this);
 			addChild(_startScene);
 		}
 		
 		public function homeScene()
 		{
-			if(_startScene)
-			{
-				removeChild(_startScene);
-			}
 			_homeScene = new HomeScene(this, stage);
 			addChild(_homeScene);
 		}

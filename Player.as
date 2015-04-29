@@ -1,7 +1,9 @@
 package
 {
 	import HomeScene;
+	
 	import KeyObject;
+	
 	import flash.display.*;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
@@ -25,14 +27,20 @@ package
 		private var hitRight:Point = new Point;
 		private var hitUp:Point = new Point;
 		private var hitDown:Point = new Point;
-		private var downStop:String = "down_stop";
+		private var animationState:String = "down_stop";
+		private var lastDirection:String = "down_stop"; 	// player facing when not moving
+		private var maxStamina:int = 1200;					// sprint meter and cooldown variables for Shift key
+		private var minStamina:int = 0;
+		private var currentStamina:int = maxStamina;
+		private var cooldown:Boolean = false;
+		/*private var downStop:String = "down_stop";
 		private var downWalk:String = "down_walk";
 		private var upStop:String = "up_stop";
 		private var upWalk:String = "up_walk";
 		private var leftStop:String = "left_stop";
 		private var leftWalk:String = "left_walk";
 		private var rightStop:String = "right_stop";
-		private var rightWalk:String = "right_walk";
+		private var rightWalk:String = "right_walk"; 		-- Old animation variables -- */
 		
 		public function Player(stageRef:Stage)
 		{
@@ -54,75 +62,8 @@ package
 			
 			addEventListener(Event.ENTER_FRAME, HitTestPointHor)
 			addEventListener(Event.ENTER_FRAME, HitTestPointVer)
-			//addEventListener(Event.ENTER_FRAME, hitCheck)
+			//addEventListener(Event.ENTER_FRAME, hitCheck) -- Moved alternative collision detection code to SpaceScene --
 		}
-		
-		/*private function hitCheck(e:Event)
-		{
-			j++;
-			for (var i = 0; i < HomeScene.objects.length; i++) 
-			{
-				var hitRangeX:Number = HomeScene.objects[i].width / 2;
-				var hitRangeY:Number = HomeScene.objects[i].height / 2;
-				
-
-				if (y + height/2 > HomeScene.objects[i].y - hitRangeY && y - height/2 < HomeScene.objects[i].y + hitRangeY)
-				{
-					if (x + width/2 > HomeScene.objects[i].x - hitRangeX && x - width/2 < HomeScene.objects[i].x + hitRangeX)
-					{
-						_collision = true;
-						upBlocked = false;
-						downBlocked = false;
-						upBlocked = false;
-						downBlocked = false;
-						trace("Hit " + HomeScene.objects[i] + j)
-						
-						if (HomeScene.objects[i].y + hitRangeY > hitUp.y && HomeScene.objects[i].x + hitRangeX > hitUp.x && HomeScene.objects[i].x - hitRangeX < hitUp.x)
-						{
-							upBlocked = true;
-						}
-						else
-						{
-							upBlocked = false;
-						}
-						if ((HomeScene.objects[i].y - hitRangeY) <= hitDown.y)
-						{
-							downBlocked = true;
-						}
-						else if ((HomeScene.objects[i].y - hitRangeY) > hitDown.y)
-						{
-							downBlocked = false;
-						}
-						if ((HomeScene.objects[i].x + hitRangeX) >= hitRight.x)
-						{
-							leftBlocked = true;
-						}
-						else if ((HomeScene.objects[i].x + hitRangeX) < hitRight.x)
-						{
-							leftBlocked = false;
-						}
-						if ((HomeScene.objects[i].x - hitRangeX) <= hitLeft.x)
-						{
-							rightBlocked = true;
-						}
-						else if ((HomeScene.objects[i].x - hitRangeX) > hitLeft.x)
-						{
-							rightBlocked = false;
-						}
-					}
-					else
-					{
-						_collision = false;
-					}
-					
-				}
-						
-			}
-
-			addEventListener(Event.ENTER_FRAME, playerLoop)
-			
-		}*/
-			
 		
 		private function HitTestPointHor(e:Event)
 		{
@@ -181,25 +122,47 @@ package
 		private function playerLoop(e:Event)
 		{
 
-			if (key.isDown(key.SHIFT))
+			if (key.isDown(key.SHIFT) && !cooldown)
 			{
-				speed = 8;
+				if (currentStamina > minStamina)
+				{
+					currentStamina -= 30;
+					//trace(currentStamina)
+				}
+				else if (currentStamina == minStamina)
+				{
+					cooldown = true;
+					trace("SPRINT COOLDOWN")
+				}
+				speed = 10;
 			}
 			else
 			{
-				speed = 4;
+				if (currentStamina < maxStamina)
+				{
+					currentStamina += 10;
+					trace(currentStamina)
+				}
+				else if (currentStamina == maxStamina)
+				{
+					cooldown = false;
+				}
+				speed = 5;
 			}
 			
 			if (key.isDown(key.LEFT) || key.isDown(key.A))
 			{
-				PlayerAnimation(leftWalk, true)
+				//PlayerAnimation(leftWalk, true)
 				
 				if (_leftCollision)
 				{
+					animationState = "left_stop";
 					trace("Left is Blocked")
 				}
 				else
 				{
+					animationState = "left_move";
+					lastDirection = "left_stop";
 					x -= speed;
 					hitDown.x -= speed;
 					hitUp.x -= speed;
@@ -210,14 +173,17 @@ package
 			}
 			if (key.isDown(key.RIGHT) || key.isDown(key.D))
 			{
-				PlayerAnimation(rightWalk, true)
+				//PlayerAnimation(rightWalk, true)
 				
 				if (_rightCollision)
 				{
+					animationState = "right_stop";
 					trace("Right is Blocked")
 				}
 				else
 				{
+					animationState = "right_move";
+					lastDirection = "right_stop";
 					x += speed;
 					hitDown.x += speed;
 					hitUp.x += speed;
@@ -228,14 +194,17 @@ package
 			}
 			if (key.isDown(key.UP) || key.isDown(key.W))
 			{
-				PlayerAnimation(upWalk, true)
+				//PlayerAnimation(upWalk, true)
 				
 				if (_upCollision)
 				{
+					animationState = "up_stop";
 					trace("Up is Blocked")
 				}
 				else
 				{
+					animationState = "up_move";
+					lastDirection = "up_stop";
 					y -= speed;
 					hitDown.y -= speed;
 					hitUp.y -= speed;
@@ -246,14 +215,18 @@ package
 			}
 			if (key.isDown(key.DOWN) || key.isDown(key.S))
 			{
-				PlayerAnimation(downWalk, true)
+				//PlayerAnimation(downWalk, true)
+				
 				
 				if(_downCollision)
 				{
+					animationState = "down_stop";
 					trace("Down is Blocked")
 				}
 				else
 				{
+					animationState = "down_move";
+					lastDirection = "down_stop";
 					y += speed;
 					hitDown.y += speed;
 					hitUp.y += speed;
@@ -268,25 +241,36 @@ package
 			}
 			if ((key.isDown(key.LEFT) || key.isDown(key.A)) && (key.isDown(key.DOWN) || key.isDown(key.S)))
 			{
-				this.rotation = -135;
+				this.rotation = 45;
 			}
 			if ((key.isDown(key.RIGHT) || key.isDown(key.D)) && (key.isDown(key.UP) || key.isDown(key.W)))
 			{
-				this.rotation = 45;
+				this.rotation = -45;
 			}
 			if ((key.isDown(key.RIGHT) || key.isDown(key.D)) && (key.isDown(key.DOWN) || key.isDown(key.S)))
 			{
 				this.rotation = 135;
 			}*/
+			
+			if (!(key.isDown(key.DOWN) || key.isDown(key.S) || key.isDown(key.UP) || key.isDown(key.W) || key.isDown(key.RIGHT) || key.isDown(key.D) || key.isDown(key.LEFT) || key.isDown(key.A)))
+			{
+				animationState = lastDirection;
+			}
+			
+			if(this.currentLabel != animationState){
+				this.gotoAndStop(animationState);
+			}
 		}
-		public function PlayerAnimation(label:String, play:Boolean=false):void
+		
+		/*public function PlayerAnimation(label:String, play:Boolean=false):void
 		{ 
 			if( play ){
 				gotoAndPlay(label);
 			}else{
 				gotoAndStop(label);
 			}
-		}
+		}*/
+		
 		
 	}
 }

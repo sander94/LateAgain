@@ -27,9 +27,9 @@ package
 		
 		public function HomeScene(passedClass:GameState, stageRef:Stage)
 		{
+			_gameState = passedClass;
 			this.stageRef = stageRef;
 			_player = new Player(stageRef);
-			_gameState = passedClass;
 			/*trace(desk_mc.x +  " " + desk_mc.y)
 			trace(desk_mc.width + " " + desk_mc.height)
 			trace(bed_mc.x + " " + bed_mc.y)
@@ -43,7 +43,6 @@ package
 			addChild(_player);
 
 		}
-		
 
 		public function makeRoom()
 		{
