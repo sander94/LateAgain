@@ -18,14 +18,6 @@ package
 		
 		public static var objects:Array = new Array();
 		
-		private var _drawer1:Sprite = new Drawer;
-		private var _drawer2:Sprite = new Drawer;
-		private var _drawer3:Sprite = new Drawer;
-		private var _drawer4:Sprite = new Drawer;
-		private var _cabinet1:Sprite = new CabinetDoor;
-		private var _cabinet2:Sprite = new CabinetDoor;
-		private var _door:Sprite = new Door;
-		
 		public function HomeScene(passedClass:GameState, stageRef:Stage)
 		{
 			
@@ -36,31 +28,21 @@ package
 			trace(desk_mc.width + " " + desk_mc.height)
 			trace(bed_mc.x + " " + bed_mc.y)
 			trace(bed_mc.width + " " + bed_mc.height)*/
-			objects.push(desk_mc, bed_mc, drawers_mc, trashcan_mc, cabinet_mc, table_mc, chair_mc, power_energy_mc, power_coffee_mc, enemy_car_mc)
-			
-			makeRoom();
+			objects.push(desk_mc, bed_mc, drawers_mc, trashcan_mc, cabinet_mc, table_mc, chair_mc)
 
 			_player.x = 720;
 			_player.y = 170;
 			addChild(_player);
+
+			_door.addEventListener(Event.ENTER_FRAME, doorHitTest)
 			
-			addEventListener(Event.ENTER_FRAME, cameraFollowCharacter);//Temporary camera code, not needed for homeScene
+			addEventListener(Event.ENTER_FRAME, cameraFollowPlayer);//Temporary camera code, not needed for homeScene
 		}
 		
 		//Temporary camera code, not needed for homeScene
-		public function cameraFollowCharacter(evt:Event)
+		public function cameraFollowPlayer(evt:Event)
 		{
 			root.scrollRect = new Rectangle(_player.x - stage.stageWidth/2, _player.y - stage.stageHeight/2, stage.stageWidth, stage.stageHeight);
-		}
-
-		public function makeRoom()
-		{
-			trace("in makeRoom");
-			_door.x = 196;
-			_door.y = 478;
-			addChild(_door);
-			
-			_door.addEventListener(Event.ENTER_FRAME, doorHitTest)
 		}
 		
 		public function doorHitTest(event:Event)
@@ -68,6 +50,8 @@ package
 			if(_door.hitTestObject(_player))
 			{
 				trace("WOOOOOOOP")
+				removeEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
+				_gameState.suburbScene();
 			}
 		}
 	}

@@ -15,6 +15,10 @@ package
 		private var key:KeyObject;
 		private var stageRef:Stage;
 		private var speed:Number = 5;
+		private var leftKey;
+		private var rightKey;
+		private var upKey;
+		private var downKey;
 		private var _leftCollision:Boolean = false;
 		private var _rightCollision:Boolean = false;
 		private var _upCollision:Boolean = false;
@@ -41,24 +45,10 @@ package
 			key = new KeyObject(stageRef);
 			curScene = scene;
 			
-			/*hitLeft.x = 710;
-			hitLeft.y = 170;
-			hitLeft=localToGlobal(hitLeft);
-			hitRight.x = 730;
-			hitRight.y = 170;
-			hitRight=localToGlobal(hitRight);
-			hitUp.x = 720;
-			hitUp.y = 156;
-			hitUp=localToGlobal(hitUp);
-			hitDown.x = 720;
-			hitDown.y = 184;
-			hitDown=localToGlobal(hitDown); -- Moved hit point creation to playerLoop and upgraded it*/
-			
 			addEventListener(Event.ENTER_FRAME, HitTestPointHor)
 			addEventListener(Event.ENTER_FRAME, HitTestPointVer)
-			//addEventListener(Event.ENTER_FRAME, hitCheck) -- Moved alternative collision detection code to SpaceScene --
 		}
-		
+
 		//Hit detection
 		private function HitTestPointHor(e:Event)
 		{
@@ -230,26 +220,27 @@ package
 		{
 			hitLeft.x = x - 10;
 			hitLeft.y = y;
-			//hitLeft=localToGlobal(hitLeft);
 			hitRight.x = x + 10;
 			hitRight.y = y;
-			//hitRight=localToGlobal(hitRight);
 			hitUp.x = x;
 			hitUp.y = y - 15;
-			//hitUp=localToGlobal(hitUp);
 			hitDown.x = x;
 			hitDown.y = y + 20;
-			//hitDown=localToGlobal(hitDown);
+
+			leftKey = key.isDown(key.LEFT), key.isDown(key.A);
+			rightKey = key.isDown(key.RIGHT) || key.isDown(key.D);
+			upKey = key.isDown(key.UP), key.isDown(key.W);
+			downKey = key.isDown(key.DOWN), key.isDown(key.S);
 			
 			//SPACE
-			if (key.isDown(key.SPACE) && heldPowerUp != false)
+			if (key.isDown(key.SPACE) && heldPowerUp)
 			{
 				powerUpActive = true;
 				addEventListener(Event.ENTER_FRAME, usedPowerUp);
 			}
 			
 			//SHIFT
-			if (key.isDown(key.SHIFT) && !cooldown && (!powerUpActive || curPowerUp.name.indexOf("energy") <= 0))
+			if (key.isDown(key.SHIFT) && !cooldown && (!powerUpActive && curPowerUp.name.indexOf("energy") <= 0))
 			{
 				if (currentStamina > minStamina)
 				{
@@ -278,7 +269,7 @@ package
 			}
 			
 			//LEFT
-			if (key.isDown(key.LEFT) || key.isDown(key.A))
+			if (leftKey)
 			{
 				
 				if (_leftCollision)
@@ -291,16 +282,12 @@ package
 					animationState = "left_move";
 					lastDirection = "left_stop";
 					x -= speed;
-					/*hitDown.x -= speed;
-					hitUp.x -= speed;
-					hitLeft.x -= speed;
-					hitRight.x -= speed;*/
 					//this.rotation = -90;
 				}
 			}
 			
 			//RIGHT
-			if (key.isDown(key.RIGHT) || key.isDown(key.D))
+			if (rightKey)
 			{
 				
 				if (_rightCollision)
@@ -313,16 +300,12 @@ package
 					animationState = "right_move";
 					lastDirection = "right_stop";
 					x += speed;
-					/*hitDown.x += speed;
-					hitUp.x += speed;
-					hitLeft.x += speed;
-					hitRight.x += speed;*/
 					//this.rotation = 90;
 				}
 			}
 			
 			//UP
-			if (key.isDown(key.UP) || key.isDown(key.W))
+			if (upKey)
 			{
 				
 				if (_upCollision)
@@ -335,16 +318,12 @@ package
 					animationState = "up_move";
 					lastDirection = "up_stop";
 					y -= speed;
-					/*hitDown.y -= speed;
-					hitUp.y -= speed;
-					hitLeft.y -= speed;
-					hitRight.y -= speed;*/
 					//this.rotation = 0;
 				}
 			}
 			
 			//DOWN
-			if (key.isDown(key.DOWN) || key.isDown(key.S))
+			if (downKey)
 			{
 				
 				
@@ -358,10 +337,6 @@ package
 					animationState = "down_move";
 					lastDirection = "down_stop";
 					y += speed;
-					/*hitDown.y += speed;
-					hitUp.y += speed;
-					hitLeft.y += speed;
-					hitRight.y += speed;*/
 					//this.rotation = 180;
 				}
 			}
@@ -383,7 +358,7 @@ package
 			}*/
 			
 			//Change animation
-			if (!(key.isDown(key.DOWN) || key.isDown(key.S) || key.isDown(key.UP) || key.isDown(key.W) || key.isDown(key.RIGHT) || key.isDown(key.D) || key.isDown(key.LEFT) || key.isDown(key.A)))
+			if (!(downKey || upKey || rightKey || leftKey))
 			{
 				animationState = lastDirection;
 			}
