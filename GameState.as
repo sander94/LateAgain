@@ -8,19 +8,17 @@ package
 		private var _startScene:StartScene;
 		private var _endScene:EndScene;
 		private var _homeScene:HomeScene;
+		private var _suburbScene:SuburbScene;
 		
 		public function GameState()
 		{
 			//startScene();
-			homeScene();
+			//homeScene();
+			suburbScene();
 		}
 		
 		public function startScene()
 		{
-			if(_homeScene)
-			{
-				removeChild(_homeScene);
-			}
 			_startScene = new StartScene(this);
 			addChild(_startScene);
 		}
@@ -29,6 +27,12 @@ package
 		{
 			_homeScene = new HomeScene(this, stage);
 			addChild(_homeScene);
+		}
+		
+		public function suburbScene()
+		{
+			_suburbScene = new SuburbScene(this, stage);
+			addChild(_suburbScene);
 		}
 		
 		public function endScene()
