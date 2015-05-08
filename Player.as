@@ -23,10 +23,14 @@ package
 		private var _rightCollision:Boolean = false;
 		private var _upCollision:Boolean = false;
 		private var _downCollision:Boolean = false;
-		private var hitLeft:Point = new Point;
+		/*private var hitLeft:Point = new Point;
 		private var hitRight:Point = new Point;
 		private var hitUp:Point = new Point;
-		private var hitDown:Point = new Point;
+		private var hitDown:Point = new Point;*/
+		private var hitLeft:MovieClip = new HitLeft;		// collision detection movieclips, alpha at 1%
+		private var hitRight:MovieClip = new HitRight;
+		private var hitDown:MovieClip = new HitDown;
+		private var hitUp:MovieClip = new HitUp;
 		private var animationState:String = "down_stop";
 		private var lastDirection:String = "down_stop"; 	// player facing when not moving
 		private var maxStamina:int = 1200;					// sprint meter and cooldown variables for Shift key
@@ -44,10 +48,31 @@ package
 		
 		public function Player(stageRef:Stage)
 		{
+			trace("in player")
 			this.stageRef = stageRef;
 			key = new KeyObject(stageRef);
 			
-			hitLeft.x = 696;
+			hitLeft.x = this.x;
+			hitLeft.y = this.y;
+			hitLeft.x -= 6;
+			addChild(hitLeft);
+			
+			hitRight.x = this.x;
+			hitRight.y = this.y;
+			hitRight.x += 6;
+			addChild(hitRight);
+			
+			hitDown.x = this.x;
+			hitDown.y = this.y;
+			hitDown.y += 10;
+			addChild(hitDown);
+			
+			hitUp.x = this.x;
+			hitUp.y = this.y;
+			hitUp.y -= 10;
+			addChild(hitUp);
+			
+			/*hitLeft.x = 696;
 			hitLeft.y = 170;
 			hitLeft=localToGlobal(hitLeft);
 			hitRight.x = 744;
@@ -58,7 +83,7 @@ package
 			hitUp=localToGlobal(hitUp);
 			hitDown.x = 720;
 			hitDown.y = 194;
-			hitDown=localToGlobal(hitDown);
+			hitDown=localToGlobal(hitDown);*/
 			
 			addEventListener(Event.ENTER_FRAME, HitTestPointHor)
 			addEventListener(Event.ENTER_FRAME, HitTestPointVer)
@@ -70,16 +95,16 @@ package
 			j++
 			for (var i = 0; i < HomeScene.objects.length; i++)
 			{
-				if (HomeScene.objects[i].hitTestPoint(hitLeft.x, hitLeft.y, true))
+				if (HomeScene.objects[i].hitTestObject(hitLeft))
 				{
 					_leftCollision = true; break;
-					trace("hitLEFT" + j);
+				trace("hitLEFT" + j);
 				}
 				else
 				{
 					_leftCollision = false;
 				}
-				if (HomeScene.objects[i].hitTestPoint(hitRight.x, hitRight.y, true))
+				if (HomeScene.objects[i].hitTestObject(hitRight))
 				{
 					_rightCollision = true; break;
 					trace("hitRIGHT" + j);
@@ -95,7 +120,7 @@ package
 			j++
 			for (var i = 0; i < HomeScene.objects.length; i++)
 			{
-				if (HomeScene.objects[i].hitTestPoint(hitUp.x, hitUp.y, true))
+				if (HomeScene.objects[i].hitTestObject(hitUp))
 				{
 					_upCollision = true; break;
 					trace("hitUP" + j);
@@ -104,7 +129,7 @@ package
 				{
 					_upCollision = false;
 				}
-				if (HomeScene.objects[i].hitTestPoint(hitDown.x, hitDown.y, true))
+				if (HomeScene.objects[i].hitTestObject(hitDown))
 				{
 					_downCollision = true; break;
 					trace("hitDOWN" + j);
@@ -134,20 +159,20 @@ package
 					cooldown = true;
 					trace("SPRINT COOLDOWN")
 				}
-				speed = 10;
+				speed = 6;
 			}
 			else
 			{
 				if (currentStamina < maxStamina)
 				{
 					currentStamina += 10;
-					trace(currentStamina)
+					//trace(currentStamina)
 				}
 				else if (currentStamina == maxStamina)
 				{
 					cooldown = false;
 				}
-				speed = 5;
+				speed = 3;
 			}
 			
 			if (key.isDown(key.LEFT) || key.isDown(key.A))
@@ -156,18 +181,18 @@ package
 				
 				if (_leftCollision)
 				{
-					animationState = "left_stop";
-					trace("Left is Blocked")
+					//animationState = "left_stop";
+					//trace("Left is Blocked")
 				}
 				else
 				{
 					animationState = "left_move";
 					lastDirection = "left_stop";
 					x -= speed;
-					hitDown.x -= speed;
+					/*hitDown.x -= speed;
 					hitUp.x -= speed;
 					hitLeft.x -= speed;
-					hitRight.x -= speed;
+					hitRight.x -= speed;*/
 					//this.rotation = -90;
 				}
 			}
@@ -177,18 +202,18 @@ package
 				
 				if (_rightCollision)
 				{
-					animationState = "right_stop";
-					trace("Right is Blocked")
+					//animationState = "right_stop";
+					//trace("Right is Blocked")
 				}
 				else
 				{
 					animationState = "right_move";
 					lastDirection = "right_stop";
 					x += speed;
-					hitDown.x += speed;
+					/*hitDown.x += speed;
 					hitUp.x += speed;
 					hitLeft.x += speed;
-					hitRight.x += speed;
+					hitRight.x += speed;*/
 					//this.rotation = 90;
 				}
 			}
@@ -198,18 +223,18 @@ package
 				
 				if (_upCollision)
 				{
-					animationState = "up_stop";
-					trace("Up is Blocked")
+					//animationState = "up_stop";
+					//trace("Up is Blocked")
 				}
 				else
 				{
 					animationState = "up_move";
 					lastDirection = "up_stop";
 					y -= speed;
-					hitDown.y -= speed;
+					/*hitDown.y -= speed;
 					hitUp.y -= speed;
 					hitLeft.y -= speed;
-					hitRight.y -= speed;
+					hitRight.y -= speed;*/
 					//this.rotation = 0;
 				}
 			}
@@ -220,18 +245,18 @@ package
 				
 				if(_downCollision)
 				{
-					animationState = "down_stop";
-					trace("Down is Blocked")
+					//animationState = "down_stop";
+					//trace("Down is Blocked")
 				}
 				else
 				{
 					animationState = "down_move";
 					lastDirection = "down_stop";
 					y += speed;
-					hitDown.y += speed;
+					/*hitDown.y += speed;
 					hitUp.y += speed;
 					hitLeft.y += speed;
-					hitRight.y += speed;
+					hitRight.y += speed;*/
 					//this.rotation = 180;
 				}
 			}
