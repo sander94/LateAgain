@@ -12,22 +12,28 @@ package
 		
 		public function GameState()
 		{
-			//startScene();
-			homeScene();
+			startScene();
+			//homeScene();
 			//suburbScene();
 		}
 		
 		public function startScene()
 		{
-			_startScene = new StartScene(this);
+			_startScene = new StartScene(this, stage);
 			addChild(_startScene);
 		}
 		
 		public function homeScene()
 		{
-			if (_startScene)
+			if(_startScene)
 			{
 				removeChild(_startScene);
+				_startScene = null;
+			}
+			if(_suburbScene)
+			{
+				removeChild(_suburbScene);
+				_suburbScene = null;
 			}
 			_homeScene = new HomeScene(this, stage);
 			addChild(_homeScene);
@@ -35,10 +41,6 @@ package
 		
 		public function suburbScene()
 		{
-			if (_homeScene)
-			{
-				removeChild(_homeScene);
-			}
 			_suburbScene = new SuburbScene(this, stage);
 			addChild(_suburbScene);
 		}
