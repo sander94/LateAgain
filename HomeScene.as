@@ -10,46 +10,50 @@ package
 	
 	public class HomeScene extends MovieClip
 	{
-		private var _gameState:GameState;
-
+		private var gameState:GameState;
 		private var stageRef:Stage;
-		public var _player:Player;
-		
+		public var player:Player;
 		public static var objects:Array = new Array();
-		
-		private var _drawer1:Sprite = new Drawer;
-		private var _drawer2:Sprite = new Drawer;
-		private var _drawer3:Sprite = new Drawer;
-		private var _drawer4:Sprite = new Drawer;
-		private var _cabinet1:Sprite = new CabinetDoor;
-		private var _cabinet2:Sprite = new CabinetDoor;
 		private var leaveHome:MovieClip = new LeaveHome;
 		
 		public function HomeScene(passedClass:GameState, stageRef:Stage)
 		{
-			_gameState = passedClass;
+			gameState = passedClass;
 			this.stageRef = stageRef;
-			_player = new Player(stageRef);
+			player = new Player(stageRef, HomeScene, this);
 
-			objects.push(wallBlock01, wallBlock02, wallBlock03, wallBlock04, furnitureBlock01, furnitureBlock02, furnitureBlock03, furnitureBlock04)
+			addObjects();
 
 			leaveHome.x = 282;
 			leaveHome.y = 193;
 			addChild(leaveHome);
 			
-			_player.x = 374;
-			_player.y = 84;
-			addChild(_player);
+			player.x = 374;
+			player.y = 84;
+			addChild(player);
 			
 			leaveHome.addEventListener(Event.ENTER_FRAME, doorHitTest,false,0,true)
 		}
 		
+		//Add collidable objects to objects array
+		public function addObjects()
+		{
+			var i:uint = 0;
+			for (i; i < this.numChildren; i++)
+			{
+				if (this.getChildAt(i).name.indexOf("object") >= 0 || this.getChildAt(i).name.indexOf("power") >= 0 || this.getChildAt(i).name.indexOf("enemy") >= 0)
+				{
+					objects.push(this.getChildAt(i))
+				}
+			}
+		}
+		
 		public function doorHitTest(event:Event)
 		{
-			if(leaveHome.hitTestObject(_player))
+			if(leaveHome.hitTestObject(player))
 			{
 				leaveHome.removeEventListener(Event.ENTER_FRAME, doorHitTest)
-				_gameState.suburbScene();
+				gameState.suburbScene();
 				trace("WOOOOOOOP")
 			}
 		}

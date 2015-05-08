@@ -15,7 +15,7 @@ package
 	public class DeadPlayer extends MovieClip
 	{
 		
-		private var _gameState:GameState;
+		private var gameState:GameState;
 		private var key:KeyObject;
 		private var stageRef:Stage;
 		private var startText:SubStartText;
@@ -23,7 +23,7 @@ package
 		public function DeadPlayer(passedClass:GameState, stageRef:Stage)
 		{
 			
-			_gameState = passedClass;
+			gameState = passedClass;
 			trace("In Ssplayer")
 			this.stageRef = stageRef;
 			key = new KeyObject(stageRef);
@@ -43,7 +43,7 @@ package
 			{
 				removeEventListener(Event.ENTER_FRAME, playerLoop)
 				this.parent.removeChild(this);
-				_gameState.homeScene();
+				gameState.homeScene();
 			}
 		}
 		

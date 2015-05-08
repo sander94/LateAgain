@@ -12,9 +12,9 @@ package
 	
 	public class SuburbScene extends MovieClip
 	{
-		private var _gameState:GameState;
+		private var gameState:GameState;
 		private var stageRef:Stage;
-		public var _player:SuburbPlayer;
+		public var player:Player;
 		
 		private var treeBatch:SuburbTreesBatch;					// Layering the objects on with in batches so they can appear on top of the player object
 		private var streetLightBatch:SubStreetLightBatch;
@@ -27,30 +27,17 @@ package
 		public static var carList:Array = new Array ();
 		public static var objects:Array = new Array();
 		
-		private var j = 0;
-		private var lastX:Number;
-		private var lastY:Number;
-		public static var playerAlive:Boolean = true;
-		private var deadPlayer:DeadPlayer;
-		
 		public function SuburbScene(passedClass:GameState, stageRef:Stage)
 		{
-			_gameState = passedClass;
+			gameState = passedClass;
 			this.stageRef = stageRef;
 			
-			playerAlive = true;
-			_player = new SuburbPlayer(stageRef, this);
-			_player.x = 131;
-			_player.y = 150;
-			addChild(_player);
+			player = new Player(stageRef, SuburbScene, this);
+			player.x = 131;
+			player.y = 150;
+			addChild(player);
 			
-			objects.push(tree_collision01, tree_collision02, tree_collision03, tree_collision04, tree_collision05, tree_collision06, 
-							tree_collision07, tree_collision08, tree_collision09, tree_collision10, tree_collision11, tree_collision12, 
-							tree_collision13, tree_collision14, tree_collision15, strLight_collision01, strLight_collision02, strLight_collision03, strLight_collision04, 
-							strLight_collision05, strLight_collision06, strLight_collision07, strLight_collision08, strLight_collision09, subFountain,
-							bush_block01, bush_block02, bush_block03, bush_block04, bush_block05, bush_block06, bush_block07, bush_block08,
-							house01_collision, house02_collision, house03_collision, sign_collision, screenBlock01, screenBlock02, screenBlock03, screenBlock04)
-			
+			addObjects();
 			
 			houseBatch = new SubHouseBatch;
 			houseBatch.x = 451;
@@ -79,8 +66,21 @@ package
 			
 			porcheTimer.start();
 			porcheTimer.addEventListener( TimerEvent.TIMER, porcheTimerTick,false,0,true );
-			_player.addEventListener(Event.ENTER_FRAME, carHitTest,false,0,true);
+			//_player.addEventListener(Event.ENTER_FRAME, carHitTest,false,0,true);
 			
+		}
+		
+		//Add collidable objects to objects array
+		public function addObjects()
+		{
+			var i:uint = 0;
+			for (i; i < this.numChildren; i++)
+			{
+				if (this.getChildAt(i).name.indexOf("object") >= 0 || this.getChildAt(i).name.indexOf("power") >= 0 || this.getChildAt(i).name.indexOf("enemy") >= 0)
+				{
+					objects.push(this.getChildAt(i))
+				}
+			}
 		}
 		
 		public function porcheTimerTick( timerEvent:TimerEvent ):void
@@ -88,14 +88,13 @@ package
 			subPorche = new SubPorche;
 			subPorche.x = 1060;
 			subPorche.y = 270;
+			subPorche.name = "enemy_car_" + carList.length;
 			addChild(subPorche);
 			carList.push(subPorche)
-			//trace(carList)
 		}
 		
-		protected function carHitTest(event:Event):void
+		/*protected function carHitTest(event:Event):void
 		{
-			j++
 			for (var i = 0; i < carList.length; i++)
 			{
 				if (carList[i].hitTestObject(_player))
@@ -113,9 +112,7 @@ package
 					addChild(deadPlayer);
 				}
 			}
-			
-
-		}
+		}*/
 		
 	}
 }
