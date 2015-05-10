@@ -1,6 +1,6 @@
 ﻿package
 {
-	
+	import KeyObject;
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Point;
@@ -13,7 +13,7 @@
 
 		private var _gameState:GameState;
 		private var stageRef:Stage;
-		private var _player:SsPlayer;
+		private var key:KeyObject;
 		
 		private var _startButton:StartButton = new StartButton;
 		private var _exitButton:ExitButton = new ExitButton;
@@ -22,13 +22,9 @@
 		
 		public function StartScene(passedClass:GameState, stageRef:Stage)
 		{
+			key = new KeyObject(stageRef);
 			_gameState = passedClass;
 			this.stageRef = stageRef;
-			_player = new SsPlayer(_gameState, stageRef);
-			
-			_player.x = 780;
-			_player.y = 230;
-			addChild(_player);
 			
 			trace("In the menu of the game");
 			
@@ -46,7 +42,17 @@
 			_startButton.addEventListener(MouseEvent.CLICK, startGame)
 			_instructionsButton.addEventListener(MouseEvent.CLICK, showInstructions)
 			_exitButton.addEventListener(MouseEvent.CLICK, exitGame)*/
+			addEventListener(Event.ENTER_FRAME, pressStart);
 			
+		}
+
+		private function pressStart(e:Event)
+		{
+			if (key.isDown(key.SPACE))
+			{
+				removeEventListener(Event.ENTER_FRAME, pressStart)
+				_gameState.homeScene();
+			}
 		}
 		
 		/*private function startGame(event:MouseEvent)

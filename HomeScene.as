@@ -1,6 +1,5 @@
 package
 {
-
 	import flash.display.*;
 	import flash.events.*;
 	import flash.geom.Point;
@@ -13,26 +12,21 @@ package
 		private var gameState:GameState;
 		private var stageRef:Stage;
 		public var player:Player;
-		public static var objects:Array = new Array();
-		private var leaveHome:MovieClip = new LeaveHome;
+		public static var objects:Array;
 		
 		public function HomeScene(passedClass:GameState, stageRef:Stage)
 		{
 			gameState = passedClass;
 			this.stageRef = stageRef;
-			player = new Player(stageRef, HomeScene, this);
-
+			objects = new Array();
 			addObjects();
 
-			leaveHome.x = 282;
-			leaveHome.y = 193;
-			addChild(leaveHome);
-			
+			player = new Player(gameState, stageRef, HomeScene, this);
 			player.x = 374;
 			player.y = 84;
 			addChild(player);
 			
-			leaveHome.addEventListener(Event.ENTER_FRAME, doorHitTest,false,0,true)
+			leaveHome.addEventListener(Event.ENTER_FRAME, sceneChange,false,0,true);//leaveHome not needed to be defined as a varialbe as it is already placed and named in the scene
 		}
 		
 		//Add collidable objects to objects array
@@ -43,18 +37,20 @@ package
 			{
 				if (this.getChildAt(i).name.indexOf("object") >= 0 || this.getChildAt(i).name.indexOf("power") >= 0 || this.getChildAt(i).name.indexOf("enemy") >= 0)
 				{
-					objects.push(this.getChildAt(i))
+					objects.push(this.getChildAt(i));
 				}
 			}
 		}
-		
-		public function doorHitTest(event:Event)
+
+		public function sceneChange(event:Event)
 		{
-			if(leaveHome.hitTestObject(player))
+			if (leaveHome.hitTestObject(player))//leaveHome not needed to be defined as a varialbe as it is already placed and named in the scene
 			{
-				leaveHome.removeEventListener(Event.ENTER_FRAME, doorHitTest)
+				leaveHome.removeEventListener(Event.ENTER_FRAME, sceneChange);
+				player.removeEventListeners();
+				objects = null;
 				gameState.suburbScene();
-				trace("WOOOOOOOP")
+				trace("WOOOOOOOP");
 			}
 		}
 	}

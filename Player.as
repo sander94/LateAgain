@@ -1,14 +1,10 @@
 package
 {
-	import HomeScene;
-	
 	import KeyObject;
-	
 	import flash.display.*;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
 	import flash.events.*;
-	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
@@ -17,16 +13,18 @@ package
 	{
 		private var key:KeyObject;
 		private var stageRef:Stage;
+		private var gameState:GameState;
 		private var speed:Number = 3;
 		private var leftCollision:Boolean = false;
 		private var rightCollision:Boolean = false;
 		private var upCollision:Boolean = false;
 		private var downCollision:Boolean = false;
 		
-		private var hitLeft:MovieClip = new HitLeft;		// collision detection movieclips, alpha at 1%
-		private var hitRight:MovieClip = new HitRight;
-		private var hitDown:MovieClip = new HitDown;
-		private var hitUp:MovieClip = new HitUp;
+		private var hitboxLeft:MovieClip = new HitboxLeft;		// collision detection movieclips, alpha at 1%
+		private var hitboxRight:MovieClip = new HitboxRight;
+		private var hitboxDown:MovieClip = new HitboxDown;
+		private var hitboxUp:MovieClip = new HitboxUp;
+
 		private var animationState:String = "down_stop";
 		private var lastDirection:String = "down_stop"; 	// player facing when not moving
 		
@@ -46,63 +44,70 @@ package
 		private var upKey;
 		private var downKey;
 		
-		private var lastX:Number;
-		private var lastY:Number;
-		private var deadPlayer:DeadPlayer;
+		public var playerAlive:Boolean = true;
+		private var downHit:DownHit; //Hit from down direction
+		/*private var upHit:UpHit; //Hit from up direction
+		private var leftHit:LeftHit; //Hit from left direction
+		private var rightHit:RightHit; //Hit from right direction*/
 		
 		private var parentClass;
+		private var parentClassWidth;
+		private var parentClassHeight;
 		
-		public function Player(stageRef:Stage, scene, passedClass)
+		public function Player(passedClass:GameState, stageRef:Stage, scene, curClass)
 		{
 			trace("in player")
 			this.stageRef = stageRef;
 			key = new KeyObject(stageRef);
+			gameState = passedClass;
+
 			curScene = scene;
+			parentClass = curClass;
+			parentClassWidth = parentClass.width;
+			parentClassHeight = parentClass.height;
+
+			hitboxLeft.x = x - 6;
+			hitboxLeft.y = y;
+			addChild(hitboxLeft);
 			
-			parentClass = passedClass;
+			hitboxRight.x = x + 6;
+			hitboxRight.y = y;
+			addChild(hitboxRight);
 			
-			trace(parentClass)
+			hitboxDown.x = x;
+			hitboxDown.y = x + 10;
+			addChild(hitboxDown);
 			
-			hitLeft.x = x - 6;
-			hitLeft.y = y;
-			addChild(hitLeft);
+			hitboxUp.x = x;
+			hitboxUp.y = y - 10;
+			addChild(hitboxUp);
 			
-			hitRight.x = x + 6;
-			hitRight.y = y;
-			addChild(hitRight);
-			
-			hitDown.x = x;
-			hitDown.y = x + 10;
-			addChild(hitDown);
-			
-			hitUp.x = x;
-			hitUp.y = y - 10;
-			addChild(hitUp);
-			
-			addEventListener(Event.ENTER_FRAME, HitTestPointHor)
-			addEventListener(Event.ENTER_FRAME, HitTestPointVer)
+			addEventListeners()
 		}
-		
+
+		//Hit detection
 		private function HitTestPointHor(e:Event)
 		{
 			for (var i = 0; i < curScene.objects.length; i++)
 			{
-				if (curScene.objects[i].hitTestObject(hitLeft))
+				//If hit check
+				if (curScene.objects[i].hitTestObject(hitboxLeft))
 				{
+					//If the target was a powerup
 					if (curScene.objects[i].name.indexOf("power") >= 0)
 					{
 						pickedUpPowerUp(curScene.objects[i]);
-						trace(curScene.objects[i].name);
 					}
+					//Or enemy
 					else if (curScene.objects[i].name.indexOf("enemy") >= 0)
 					{
 						hitEnemy(curScene.objects[i]);
-						trace(curScene.objects[i].name);
 					}
+					//Othervise stop movement in that direction
 					else
 					{
-						leftCollision = true; break;
-						trace("hitLEFT");
+						leftCollision = true;
+						break;
 					}
 				}
 				else
@@ -110,22 +115,20 @@ package
 					leftCollision = false;
 				}
 				
-				if (curScene.objects[i].hitTestObject(hitRight))
+				if (curScene.objects[i].hitTestObject(hitboxRight))
 				{
 					if (curScene.objects[i].name.indexOf("power") >= 0)
 					{
 						pickedUpPowerUp(curScene.objects[i]);
-						trace(curScene.objects[i].name);
 					}
 					else if (curScene.objects[i].name.indexOf("enemy") >= 0)
 					{
 						hitEnemy(curScene.objects[i]);
-						trace(curScene.objects[i].name);
 					}
 					else
 					{
-						rightCollision = true; break;
-						trace("hitRIGHT");
+						rightCollision = true;
+						break;
 					}
 				}
 				else
@@ -138,22 +141,20 @@ package
 		{
 			for (var i = 0; i < curScene.objects.length; i++)
 			{
-				if (curScene.objects[i].hitTestObject(hitUp))
+				if (curScene.objects[i].hitTestObject(hitboxUp))
 				{
 					if (curScene.objects[i].name.indexOf("power") >= 0)
 					{
 						pickedUpPowerUp(curScene.objects[i]);
-						trace(curScene.objects[i].name);
 					}
 					else if (curScene.objects[i].name.indexOf("enemy") >= 0)
 					{
 						hitEnemy(curScene.objects[i]);
-						trace(curScene.objects[i].name);
 					}
 					else
 					{
-						upCollision = true; break;
-						trace("hitUP");
+						upCollision = true;
+						break;
 					}
 				}
 				else
@@ -161,22 +162,20 @@ package
 					upCollision = false;
 				}
 				
-				if (curScene.objects[i].hitTestObject(hitDown))
+				if (curScene.objects[i].hitTestObject(hitboxDown))
 				{
 					if (curScene.objects[i].name.indexOf("power") >= 0)
 					{
 						pickedUpPowerUp(curScene.objects[i]);
-						trace(curScene.objects[i].name);
 					}
 					else if (curScene.objects[i].name.indexOf("enemy") >= 0)
 					{
 						hitEnemy(curScene.objects[i]);
-						trace(curScene.objects[i].name);
 					}
 					else
 					{
-						downCollision = true; break;
-						trace("hitDOWN");
+						downCollision = true;
+						break;
 					}
 				}
 				else
@@ -184,20 +183,51 @@ package
 					downCollision = false;
 				}
 			}
-			
-			addEventListener(Event.ENTER_FRAME, playerLoop)
+		}
+
+		//Remove EventListeners
+		public function removeEventListeners()
+		{
+			removeEventListener(Event.ENTER_FRAME, HitTestPointHor);
+			removeEventListener(Event.ENTER_FRAME, HitTestPointVer);
+			removeEventListener(Event.ENTER_FRAME, playerLoop);
 		}
 		
+		//Add EventListeners
+		public function addEventListeners()
+		{
+			addEventListener(Event.ENTER_FRAME, HitTestPointHor);
+			addEventListener(Event.ENTER_FRAME, HitTestPointVer);
+			addEventListener(Event.ENTER_FRAME, playerLoop);
+		}
+
+		//Collision with enemy
 		private function hitEnemy(enemy)
 		{
+			//Check if powerup is active and that it is energy drink (immortality)
 			if (powerUpActive && curPowerUp.name.indexOf("energy") >= 0)
 			{
 				trace("Immune");
 			}
-			else if (enemy.name.indexOf("car") >= 0)
+			//Check wich direction got hit from
+			else if (enemy.hitTestObject(hitboxDown))
 			{
-				trace("You got flattened by a car!")
+				//Collision happened with hitboxDown
+				enemy.removeEventListeners();
+				downHit = new DownHit(gameState, stageRef, enemy, curScene); //Pass enemy information, gameState, stageRef and current scene to the DownHit class
+				downHit.x = x;
+				downHit.y = y;
+				playerAlive = downHit.hitCheck();
+				parent.addChild(downHit);
+				parent.removeChild(this);
+				removeEventListeners();
+
 			}
+			/*TODO add other collision directions
+			else if ()
+			{
+
+			}*/
 		}
 		
 		//Pick up powerup
@@ -249,13 +279,17 @@ package
 			}
 		}
 		
+		//Player loop
 		private function playerLoop(e:Event)
 		{
 			leftKey = key.isDown(key.LEFT), key.isDown(key.A);
 			rightKey = key.isDown(key.RIGHT), key.isDown(key.D);
 			upKey = key.isDown(key.UP), key.isDown(key.W);
 			downKey = key.isDown(key.DOWN), key.isDown(key.S);
-			
+
+			//coordinates for debug purposes
+			//trace("x " + x + " " + parentClass.x + " width " + parentClassWidth + " y " + y + " " + parentClass.y + " height " + parentClassHeight)
+
 			if (key.isDown(key.SHIFT) && !cooldown)
 			{
 				if (currentStamina > minStamina)
@@ -283,11 +317,9 @@ package
 				}
 				speed = 3;
 			}
-			
+
 			if (leftKey)
 			{
-				//PlayerAnimation(leftWalk, true)
-				
 				if (leftCollision)
 				{
 					//animationState = "left_stop";
@@ -298,7 +330,8 @@ package
 					animationState = "left_move";
 					lastDirection = "left_stop";
 					x -= speed;
-					if (parentClass.x <= -2 && parentClass.x >= -stage.width && x <= parentClass.width - (stage.width / 2))
+					if (parentClass.x <= -3 && x <= parentClassWidth - 260 && parentClassWidth > 483)
+					//if (parentClass.x <= -2 && parentClass.x >= -480 && x <= 720)
 					{
 						parentClass.x += speed;
 					}
@@ -306,8 +339,6 @@ package
 			}
 			if (rightKey)
 			{
-				//PlayerAnimation(rightWalk, true)
-				
 				if (rightCollision)
 				{
 					//animationState = "right_stop";
@@ -318,7 +349,8 @@ package
 					animationState = "right_move";
 					lastDirection = "right_stop";
 					x += speed;
-					if (parentClass.x >= -stage.width + 2 && parentClass.x <= stage.width && x <= parentClass.width - (stage.width / 2))
+					if (parentClass.x >= -parentClassWidth + 510 && x >= 240 && parentClassWidth > 483)
+					//if (parentClass.x >= -478 && x >= 240)
 					{
 						parentClass.x -= speed;
 					}
@@ -326,8 +358,6 @@ package
 			}
 			if (upKey)
 			{
-				//PlayerAnimation(upWalk, true)
-				
 				if (upCollision)
 				{
 					//animationState = "up_stop";
@@ -338,7 +368,8 @@ package
 					animationState = "up_move";
 					lastDirection = "up_stop";
 					y -= speed;
-					if (parentClass.y <= 180 && y <= 180)
+					if (parentClass.y <= -3 && y <= -parentClass.y + 180 && parentClassHeight > 363)
+					//if (parentClass.y <= 180 && y <= 180)
 					{
 						parentClass.y += speed;
 					}
@@ -346,9 +377,6 @@ package
 			}
 			if (downKey)
 			{
-				//PlayerAnimation(downWalk, true)
-				
-				
 				if(downCollision)
 				{
 					//animationState = "down_stop";
@@ -359,7 +387,7 @@ package
 					animationState = "down_move";
 					lastDirection = "down_stop";
 					y += speed;
-					if (parentClass.y >= -12 && y >= 0)
+					if (parentClass.y >= -parentClassHeight + 380 && y >= 180 && parentClassHeight > 363)
 					{
 						parentClass.y -= speed;
 					}
@@ -371,21 +399,9 @@ package
 				animationState = lastDirection;
 			}
 			
-			if(this.currentLabel != animationState){
+			if (this.currentLabel != animationState){
 				this.gotoAndStop(animationState);
 			}
-		}
-		
-		public function dispose()
-		{
-			stop();
-			/*stage.removeEventListener(Event.ENTER_FRAME, HitTestPointHor)
-			stage.removeEventListener(Event.ENTER_FRAME, HitTestPointVer)
-			stage.removeEventListener(Event.ENTER_FRAME, playerLoop)*/
-			removeEventListener(Event.ENTER_FRAME, HitTestPointHor)
-			removeEventListener(Event.ENTER_FRAME, HitTestPointVer)
-			removeEventListener(Event.ENTER_FRAME, playerLoop)
-			
 		}
 	}
 }

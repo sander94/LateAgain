@@ -19,29 +19,23 @@ package
 		
 		public function startScene()
 		{
+			removeScene();
 			_startScene = new StartScene(this, stage);
 			addChild(_startScene);
 		}
 		
 		public function homeScene()
 		{
-			if(_startScene)
-			{
-				removeChild(_startScene);
-				_startScene = null;
-			}
-			if(_suburbScene)
-			{
-				removeChild(_suburbScene);
-				_suburbScene = null;
-			}
+			removeScene();
 			_homeScene = new HomeScene(this, stage);
 			addChild(_homeScene);
 		}
 		
 		public function suburbScene()
 		{
+			removeScene();
 			_suburbScene = new SuburbScene(this, stage);
+			_suburbScene.y = -180;
 			addChild(_suburbScene);
 		}
 		
@@ -50,7 +44,24 @@ package
 			// TODO Auto Generated method stub
 			
 		}
-		
 
+		public function removeScene()
+		{
+			if (_startScene)
+			{
+				removeChild(_startScene);
+				_startScene = null;
+			}
+			if (_homeScene)
+			{
+				removeChild(_homeScene);
+				_homeScene = null;
+			}
+			if (_suburbScene)
+			{
+				removeChild(_suburbScene);
+				_suburbScene = null;
+			}
+		}
 	}
 }
