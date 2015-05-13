@@ -80,8 +80,8 @@ package
 				player.removeEventListeners();
 				//porche.removeEventListeners();
 				objects = null;
-				gameState.startScene();
-				trace("HOT LOOPS");
+				gameState.cityScene();
+				trace("Moving to City");
 			}
 		}
 		

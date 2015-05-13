@@ -15,13 +15,13 @@ package
 			//trace("randomNumber: " + _randomNumber);
 			
 			if(_randomNumber < 5)
-				this.gotoAndStop("audi_drive");
+				this.gotoAndStop("audi_drive_left");
 			else if(_randomNumber >= 5 && _randomNumber < 6)
-				this.gotoAndStop("porche_drive");
+				this.gotoAndStop("porche_drive_left");
 			else if(_randomNumber >= 6 && _randomNumber < 9)
-				this.gotoAndStop("taxi_drive");
+				this.gotoAndStop("taxi_drive_left");
 			else if(_randomNumber >= 9)
-				this.gotoAndStop("cop_drive");
+				this.gotoAndStop("cop_drive_left");
 			
 			addEventListener(Event.ENTER_FRAME, PorcheMove,false,0,true)
 		}

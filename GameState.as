@@ -11,14 +11,16 @@ package
 		private var _suburbScene:SuburbScene;
 		private var _suburbScene2:SuburbScene2;
 		private var _slumScene:SlumScene;
+		private var _cityScene:CityScene;
 		
 		public function GameState()
 		{
-			startScene();
+			//startScene();
 			//homeScene();
 			//suburbScene();
 			//suburbScene2();
-			//slumScene();
+			slumScene();
+			//cityScene();
 		}
 		
 		public function startScene()
@@ -54,8 +56,15 @@ package
 		{
 			removeScene();
 			_slumScene = new SlumScene(this, stage);
-			//_suburbScene2.y = -180;
+			//_slumScene.y = -50;
 			addChild(_slumScene);
+		}
+		public function cityScene()
+		{
+			removeScene();
+			_cityScene = new CityScene(this, stage);
+			_cityScene.y = -140;
+			addChild(_cityScene);
 		}
 		
 		public function endScene()
@@ -90,6 +99,11 @@ package
 			{
 				removeChild(_slumScene);
 				_slumScene = null;
+			}
+			if (_cityScene)
+			{
+				removeChild(_cityScene);
+				_cityScene = null;
 			}
 		}
 	}
