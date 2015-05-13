@@ -8,40 +8,40 @@ package
 	import flash.text.TextFormat;
 	import flash.utils.Timer;
 	
-	public class SuburbScene extends MovieClip
+	public class SlumScene extends MovieClip
 	{
 		private var gameState:GameState;
 		private var stageRef:Stage;
 		public var player:Player;
-
-		private var suburbForeground:SuburbForeground;
+		
+		private var slumForeground:SlumForeground;
 		private var porche:Porche;
-		private var porcheTimer:Timer = new Timer(3000);		// 1000ms == 1second
+		private var porcheTimer:Timer = new Timer(2000);		// 1000ms == 1second
 		
 		//public static var carList:Array = new Array();
 		public static var objects:Array;
 		
-		public function SuburbScene(passedClass:GameState, stageRef:Stage)
+		public function SlumScene(passedClass:GameState, stageRef:Stage)
 		{
 			gameState = passedClass;
 			this.stageRef = stageRef;
 			objects = new Array();
 			addObjects();
-
-			player = new Player(gameState, stageRef, SuburbScene, this);
-			player.x = 100;
-			player.y = 340;
+			
+			player = new Player(gameState, stageRef, SlumScene, this);
+			player.x = 40;
+			player.y = 184;
 			addChild(player);
-
-			suburbForeground = new SuburbForeground;
-			suburbForeground.x = 480;
-			suburbForeground.y = 268;
-			addChild(suburbForeground);
 			
-			porcheTimer.start();
+			slumForeground = new SlumForeground;
+			slumForeground.x = 489;
+			slumForeground.y = 232;
+			addChild(slumForeground);
+			
+			/*porcheTimer.start();
 			porcheTimer.addEventListener(TimerEvent.TIMER, porcheTimerTick,false,0,true);
-			
-			leaveSuburb.addEventListener(Event.ENTER_FRAME, sceneChange,false,0,true);
+			*/
+			leaveSlum.addEventListener(Event.ENTER_FRAME, sceneChange,false,0,true);
 		}
 		
 		//Add collidable objects to objects array
@@ -56,7 +56,7 @@ package
 				}
 			}
 		}
-		
+		/*
 		private function porcheTimerTick(timerEvent:TimerEvent):void
 		{
 			if (player.playerAlive)
@@ -69,20 +69,21 @@ package
 				objects.push(porche);
 			}
 		}
-		
+		*/
 		public function sceneChange(event:Event)
 		{
-			if (leaveSuburb.hitTestObject(player))
+			if (leaveSlum.hitTestObject(player))
 			{
-				porcheTimer.stop();
-				porcheTimer.removeEventListener(TimerEvent.TIMER, porcheTimerTick);
-				leaveSuburb.removeEventListener(Event.ENTER_FRAME, sceneChange);
+				//porcheTimer.stop();
+				//porcheTimer.removeEventListener(TimerEvent.TIMER, porcheTimerTick);
+				leaveSlum.removeEventListener(Event.ENTER_FRAME, sceneChange);
 				player.removeEventListeners();
-				porche.removeEventListeners();
+				//porche.removeEventListeners();
 				objects = null;
-				gameState.suburbScene2();
-				trace("Switch to Suburb 2");
+				gameState.startScene();
+				trace("HOT LOOPS");
 			}
 		}
+		
 	}
 }

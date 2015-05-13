@@ -40,7 +40,7 @@ package
 
 				return false; //Retrun false to set playerAlive in Player class to false
 			}
-			/*Cheking and processing of hitting other enemies
+			/*Checking and processing of hitting other enemies
 			else if ()
 			{
 

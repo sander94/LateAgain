@@ -9,12 +9,16 @@ package
 		private var _endScene:EndScene;
 		private var _homeScene:HomeScene;
 		private var _suburbScene:SuburbScene;
+		private var _suburbScene2:SuburbScene2;
+		private var _slumScene:SlumScene;
 		
 		public function GameState()
 		{
 			startScene();
 			//homeScene();
 			//suburbScene();
+			//suburbScene2();
+			//slumScene();
 		}
 		
 		public function startScene()
@@ -39,6 +43,21 @@ package
 			addChild(_suburbScene);
 		}
 		
+		public function suburbScene2()
+		{
+			removeScene();
+			_suburbScene2 = new SuburbScene2(this, stage);
+			//_suburbScene2.y = -180;
+			addChild(_suburbScene2);
+		}
+		public function slumScene()
+		{
+			removeScene();
+			_slumScene = new SlumScene(this, stage);
+			//_suburbScene2.y = -180;
+			addChild(_slumScene);
+		}
+		
 		public function endScene()
 		{
 			// TODO Auto Generated method stub
@@ -61,6 +80,16 @@ package
 			{
 				removeChild(_suburbScene);
 				_suburbScene = null;
+			}
+			if (_suburbScene2)
+			{
+				removeChild(_suburbScene2);
+				_suburbScene2 = null;
+			}
+			if (_slumScene)
+			{
+				removeChild(_slumScene);
+				_slumScene = null;
 			}
 		}
 	}

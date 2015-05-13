@@ -107,6 +107,7 @@ package
 					else
 					{
 						leftCollision = true;
+						//trace ("Collision")
 						break;
 					}
 				}
@@ -128,6 +129,7 @@ package
 					else
 					{
 						rightCollision = true;
+						//trace ("Collision")
 						break;
 					}
 				}
@@ -154,6 +156,7 @@ package
 					else
 					{
 						upCollision = true;
+						//trace ("Collision")
 						break;
 					}
 				}
@@ -175,6 +178,7 @@ package
 					else
 					{
 						downCollision = true;
+						//trace ("Collision")
 						break;
 					}
 				}
@@ -330,7 +334,7 @@ package
 					animationState = "left_move";
 					lastDirection = "left_stop";
 					x -= speed;
-					if (parentClass.x <= -3 && x <= parentClassWidth - 260 && parentClassWidth > 483)
+					if (parentClass.x <= -3 && x <= parentClassWidth - 440 && parentClassWidth > 483)
 					//if (parentClass.x <= -2 && parentClass.x >= -480 && x <= 720)
 					{
 						parentClass.x += speed;
@@ -349,7 +353,7 @@ package
 					animationState = "right_move";
 					lastDirection = "right_stop";
 					x += speed;
-					if (parentClass.x >= -parentClassWidth + 510 && x >= 240 && parentClassWidth > 483)
+					if (parentClass.x >= -parentClassWidth + 690 && x >= 240 && parentClassWidth > 483)
 					//if (parentClass.x >= -478 && x >= 240)
 					{
 						parentClass.x -= speed;
@@ -387,7 +391,7 @@ package
 					animationState = "down_move";
 					lastDirection = "down_stop";
 					y += speed;
-					if (parentClass.y >= -parentClassHeight + 380 && y >= 180 && parentClassHeight > 363)
+					if (parentClass.y >= -parentClassHeight + 530 && y >= 180 && parentClassHeight > 363)
 					{
 						parentClass.y -= speed;
 					}
