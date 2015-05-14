@@ -3,7 +3,7 @@
 	import KeyObject;
 	import flash.display.*;
 	import flash.events.*;
-	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.utils.Timer;
@@ -21,14 +21,16 @@
 			_gameState = passedClass;
 			this.stageRef = stageRef;
 			
-			addEventListener(Event.ENTER_FRAME, pressStart);
+			addEventListener(Event.ENTER_FRAME, mainLoop);
 		}
 
-		private function pressStart(e:Event)
+		private function mainLoop(e:Event)
 		{
+			root.scrollRect = new Rectangle(0, 0, stageRef.stageWidth, stageRef.stageHeight);
+
 			if (key.isDown(key.SPACE))
 			{
-				removeEventListener(Event.ENTER_FRAME, pressStart)
+				removeEventListener(Event.ENTER_FRAME, mainLoop)
 				_gameState.homeScene();
 			}
 		}

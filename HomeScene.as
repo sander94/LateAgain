@@ -2,7 +2,6 @@ package
 {
 	import flash.display.*;
 	import flash.events.*;
-	import flash.geom.Point;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.utils.Timer;
@@ -13,6 +12,7 @@ package
 		private var stageRef:Stage;
 		public var player:Player;
 		public static var objects:Array;
+		public static var speedMult:Number = 1;
 		
 		public function HomeScene(passedClass:GameState, stageRef:Stage)
 		{

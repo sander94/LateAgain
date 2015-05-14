@@ -15,11 +15,11 @@ package
 		
 		public function GameState()
 		{
-			//startScene();
+			startScene();
 			//homeScene();
 			//suburbScene();
 			//suburbScene2();
-			slumScene();
+			//slumScene();
 			//cityScene();
 		}
 		
@@ -41,7 +41,7 @@ package
 		{
 			removeScene();
 			_suburbScene = new SuburbScene(this, stage);
-			_suburbScene.y = -180;
+			//_suburbScene.y = -180;
 			addChild(_suburbScene);
 		}
 		
@@ -63,7 +63,7 @@ package
 		{
 			removeScene();
 			_cityScene = new CityScene(this, stage);
-			_cityScene.y = -140;
+			//_cityScene.y = -140;
 			addChild(_cityScene);
 		}
 		

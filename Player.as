@@ -5,7 +5,7 @@ package
 	import flash.display.MovieClip;
 	import flash.display.Stage;
 	import flash.events.*;
-	import flash.geom.Rectangle;
+	import flash.geom.*;
 	import flash.ui.Keyboard;
 	import flash.utils.Timer;
 	
@@ -15,6 +15,9 @@ package
 		private var stageRef:Stage;
 		private var gameState:GameState;
 		private var speed:Number = 3;
+		private var userInterface:UI;
+		private var staminaBar:StaminaBar;
+
 		private var leftCollision:Boolean = false;
 		private var rightCollision:Boolean = false;
 		private var upCollision:Boolean = false;
@@ -34,9 +37,9 @@ package
 		private var cooldown:Boolean = false;
 		
 		private var heldPowerUp:Boolean = false;
-		private var curPowerUp:MovieClip = new MovieClip;
+		public var curPowerUp:MovieClip = new MovieClip;
 		private var powerUpTime:int = 1000;
-		private var powerUpActive:Boolean = false;
+		public var powerUpActive:Boolean = false;
 		private var curScene;
 		
 		private var leftKey;
@@ -45,14 +48,18 @@ package
 		private var downKey;
 		
 		public var playerAlive:Boolean = true;
-		private var downHit:DownHit; //Hit from down direction
-		/*private var upHit:UpHit; //Hit from up direction
-		private var leftHit:LeftHit; //Hit from left direction
-		private var rightHit:RightHit; //Hit from right direction*/
+		public var restartText:RestartText;
 		
 		private var parentClass;
 		private var parentClassWidth;
 		private var parentClassHeight;
+
+		private var topY;
+		private var bottomY;
+		private var leftX;
+		private var rightX;
+
+		private var staminaColor:ColorTransform;
 		
 		public function Player(passedClass:GameState, stageRef:Stage, scene, curClass)
 		{
@@ -65,6 +72,9 @@ package
 			parentClass = curClass;
 			parentClassWidth = parentClass.width;
 			parentClassHeight = parentClass.height;
+			setCameraLimits();
+
+			
 
 			hitboxLeft.x = x - 6;
 			hitboxLeft.y = y;
@@ -82,110 +92,221 @@ package
 			hitboxUp.y = y - 10;
 			addChild(hitboxUp);
 			
-			addEventListeners()
+			addEventListeners();
 		}
 
 		//Hit detection
 		private function HitTestPointHor(e:Event)
 		{
-			for (var i = 0; i < curScene.objects.length; i++)
+			if (playerAlive)
 			{
-				//If hit check
-				if (curScene.objects[i].hitTestObject(hitboxLeft))
+				for (var i = 0; i < curScene.objects.length; i++)
 				{
-					//If the target was a powerup
-					if (curScene.objects[i].name.indexOf("power") >= 0)
+					//If hit check
+					if (curScene.objects[i].hitTestObject(hitboxLeft))
 					{
-						pickedUpPowerUp(curScene.objects[i]);
-					}
-					//Or enemy
-					else if (curScene.objects[i].name.indexOf("enemy") >= 0)
-					{
-						hitEnemy(curScene.objects[i]);
-					}
-					//Othervise stop movement in that direction
-					else
-					{
-						leftCollision = true;
-						//trace ("Collision")
-						break;
-					}
-				}
-				else
-				{
-					leftCollision = false;
-				}
-				
-				if (curScene.objects[i].hitTestObject(hitboxRight))
-				{
-					if (curScene.objects[i].name.indexOf("power") >= 0)
-					{
-						pickedUpPowerUp(curScene.objects[i]);
-					}
-					else if (curScene.objects[i].name.indexOf("enemy") >= 0)
-					{
-						hitEnemy(curScene.objects[i]);
+						//If the target was a powerup
+						if (curScene.objects[i].name.indexOf("power") >= 0)
+						{
+							pickedUpPowerUp(curScene.objects[i]);
+						}
+						//Or enemy
+						else if (curScene.objects[i].name.indexOf("enemy") >= 0)
+						{
+							hitEnemy(curScene.objects[i], "left");
+						}
+						//Othervise stop movement in that direction
+						else
+						{
+							leftCollision = true;
+							//trace ("Collision")
+							break;
+						}
 					}
 					else
 					{
-						rightCollision = true;
-						//trace ("Collision")
-						break;
+						leftCollision = false;
 					}
-				}
-				else
-				{
-					rightCollision = false;
+					
+					if (curScene.objects[i].hitTestObject(hitboxRight))
+					{
+						if (curScene.objects[i].name.indexOf("power") >= 0)
+						{
+							pickedUpPowerUp(curScene.objects[i]);
+						}
+						else if (curScene.objects[i].name.indexOf("enemy") >= 0)
+						{
+							hitEnemy(curScene.objects[i], "right");
+						}
+						else
+						{
+							rightCollision = true;
+							//trace ("Collision")
+							break;
+						}
+					}
+					else
+					{
+						rightCollision = false;
+					}
 				}
 			}
 		}
 		private function HitTestPointVer(e:Event)
 		{
-			for (var i = 0; i < curScene.objects.length; i++)
+			if (playerAlive)
 			{
-				if (curScene.objects[i].hitTestObject(hitboxUp))
+				for (var i = 0; i < curScene.objects.length; i++)
 				{
-					if (curScene.objects[i].name.indexOf("power") >= 0)
+					if (curScene.objects[i].hitTestObject(hitboxUp))
 					{
-						pickedUpPowerUp(curScene.objects[i]);
-					}
-					else if (curScene.objects[i].name.indexOf("enemy") >= 0)
-					{
-						hitEnemy(curScene.objects[i]);
+						if (curScene.objects[i].name.indexOf("power") >= 0)
+						{
+							pickedUpPowerUp(curScene.objects[i]);
+						}
+						else if (curScene.objects[i].name.indexOf("enemy") >= 0)
+						{
+							hitEnemy(curScene.objects[i], "up");
+						}
+						else
+						{
+							upCollision = true;
+							//trace ("Collision")
+							break;
+						}
 					}
 					else
 					{
-						upCollision = true;
-						//trace ("Collision")
-						break;
+						upCollision = false;
 					}
-				}
-				else
-				{
-					upCollision = false;
-				}
-				
-				if (curScene.objects[i].hitTestObject(hitboxDown))
-				{
-					if (curScene.objects[i].name.indexOf("power") >= 0)
+					
+					if (curScene.objects[i].hitTestObject(hitboxDown))
 					{
-						pickedUpPowerUp(curScene.objects[i]);
-					}
-					else if (curScene.objects[i].name.indexOf("enemy") >= 0)
-					{
-						hitEnemy(curScene.objects[i]);
+						if (curScene.objects[i].name.indexOf("power") >= 0)
+						{
+							pickedUpPowerUp(curScene.objects[i]);
+						}
+						else if (curScene.objects[i].name.indexOf("enemy") >= 0)
+						{
+							hitEnemy(curScene.objects[i], "down");
+						}
+						else
+						{
+							downCollision = true;
+							//trace ("Collision")
+							break;
+						}
 					}
 					else
 					{
-						downCollision = true;
-						//trace ("Collision")
-						break;
+						downCollision = false;
 					}
 				}
-				else
+			}
+		}
+
+		//Set limits for camera movement
+		private function setCameraLimits()
+		{
+			topY = parentClass.object_screenBlock01.y;
+			rightX = parentClass.object_screenBlock02.x;
+			bottomY = parentClass.object_screenBlock03.y;
+			leftX = parentClass.object_screenBlock04.x;
+		}
+
+		//Actual camera code
+		private function cameraFollowPlayer(e:Event)
+		{
+			if (parentClassHeight > 363 && parentClassWidth > 483)
+			{
+				switch (getXY())
 				{
-					downCollision = false;
+					case "middle":
+					root.scrollRect = new Rectangle(x - stage.stageWidth/2, y - stage.stageHeight/2, stage.stageWidth, stage.stageHeight);
+					break;
+
+					case "top left":
+					root.scrollRect = new Rectangle(leftX, topY, stage.stageWidth, stage.stageHeight);
+					break;
+
+					case "bottom left":
+					root.scrollRect = new Rectangle(leftX, bottomY - 360, stage.stageWidth, stage.stageHeight);
+					break;
+					
+					case "top right":
+					root.scrollRect = new Rectangle(rightX - 480, topY, stage.stageWidth, stage.stageHeight);
+					break;
+					
+					case "bottom right":
+					root.scrollRect = new Rectangle(rightX - 480, bottomY - 360, stage.stageWidth, stage.stageHeight);
+					break;
+
+					case "left":
+					root.scrollRect = new Rectangle(leftX, y - stage.stageHeight/2, stage.stageWidth, stage.stageHeight);
+					break;
+					
+					case "right":
+					root.scrollRect = new Rectangle(rightX - 480, y - stage.stageHeight/2, stage.stageWidth, stage.stageHeight);
+					break;
+					
+					case "top":
+					root.scrollRect = new Rectangle(x - stage.stageWidth/2, topY, stage.stageWidth, stage.stageHeight);
+					break;
+					
+					case "bottom":
+					root.scrollRect = new Rectangle(x - stage.stageWidth/2, bottomY - 360, stage.stageWidth, stage.stageHeight);
+					break;
 				}
+			}
+		}
+
+		//Checks location of player in relation to borders
+		private function getXY()
+		{
+			//Player is not at any edge or corner
+			if (x >= leftX + 240 && x <= rightX - 240 && y >= topY + 180 && y <= bottomY - 180)
+			{
+				return "middle";
+			}
+			//Player is at top left corner
+			else if (x <= leftX + 240 && y <= topY + 180)
+			{
+				return "top left";
+			}
+			//Player is at bottom left corner
+			else if (x <= leftX + 240 && y >= bottomY - 180)
+			{
+				return "bottom left";
+			}
+			//Player is at top right corner
+			else if (x >= rightX - 240 && y <= topY + 180)
+			{
+				return "top right";
+			}
+			//Player is at bottom right corner
+			else if (x >= rightX - 240 && y >= bottomY - 180)
+			{
+				return "bottom right";
+			}
+			//Player is at left edge
+			else if (x <= leftX + 240)
+			{
+				return "left";
+			}
+			//Player is at right edge
+			else if (x >= rightX - 240)
+			{
+				return "right";
+			}
+			//Player is at top edge
+			else if (y <= topY + 180)
+			{
+				return "top";
+			}
+			//Player is at bottom edge
+			else if (y >= bottomY - 240)
+			{
+				return "bottom";
 			}
 		}
 
@@ -195,6 +316,8 @@ package
 			removeEventListener(Event.ENTER_FRAME, HitTestPointHor);
 			removeEventListener(Event.ENTER_FRAME, HitTestPointVer);
 			removeEventListener(Event.ENTER_FRAME, playerLoop);
+			removeEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
+			this.stageRef.removeChild(userInterface);
 		}
 		
 		//Add EventListeners
@@ -203,35 +326,135 @@ package
 			addEventListener(Event.ENTER_FRAME, HitTestPointHor);
 			addEventListener(Event.ENTER_FRAME, HitTestPointVer);
 			addEventListener(Event.ENTER_FRAME, playerLoop);
+			addEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
+			userInterface = new UI;
+			this.stageRef.addChild(userInterface);
+			staminaBar = new StaminaBar;
+			staminaBar.x = -65;
+			userInterface.staminaFrame.addChildAt(staminaBar,0);
+			staminaColor = new ColorTransform(0,0,0,1,0,255,0,0);
+			staminaBar.transform.colorTransform = staminaColor;
 		}
 
 		//Collision with enemy
-		private function hitEnemy(enemy)
+		private function hitEnemy(enemy, direction)
 		{
 			//Check if powerup is active and that it is energy drink (immortality)
 			if (powerUpActive && curPowerUp.name.indexOf("energy") >= 0)
 			{
 				trace("Immune");
 			}
-			//Check wich direction got hit from
-			else if (enemy.hitTestObject(hitboxDown))
+			else
 			{
-				//Collision happened with hitboxDown
-				enemy.removeEventListeners();
-				downHit = new DownHit(gameState, stageRef, enemy, curScene); //Pass enemy information, gameState, stageRef and current scene to the DownHit class
-				downHit.x = x;
-				downHit.y = y;
-				playerAlive = downHit.hitCheck();
-				parent.addChild(downHit);
-				parent.removeChild(this);
-				removeEventListeners();
+				addEventListener(Event.ENTER_FRAME, playerDown);
 
+				//Check wich direction got hit from
+				switch (direction)
+				{
+					case "down":
+					this.gotoAndStop("down_hit");
+					break;
+
+					case "up":
+					this.gotoAndStop("up_hit");
+					break;
+
+					case "left":
+					this.gotoAndStop("left_hit");
+					break;
+
+					case "right":
+					this.gotoAndStop("right_hit");
+					break;
+				}
+
+				//If enemy was car, game over
+				if (enemy.name.indexOf("car"))
+				{
+					removeEventListeners();
+
+					restartText = new RestartText;
+					restartTextXY();
+					parent.addChild(restartText);
+					
+					playerAlive = false;
+				}
+				/*Checking and processing of hitting other enemies
+				else if ()
+				{
+				
+				}*/
 			}
-			/*TODO add other collision directions
-			else if ()
+		}
+		
+		//Player was hit
+		private function playerDown(e:Event)
+		{
+			if (key.isDown(key.SPACE) && !playerAlive)
 			{
+				removeEventListener(Event.ENTER_FRAME, playerDown);
 
-			}*/
+				gameState.startScene();
+				curScene.objects = null;
+			}
+		}
+		
+		//Checks enemy type
+		private function checkEnemyType(enemy)
+		{
+			
+		}
+
+		//X and Y coordinates for restart text
+		private function restartTextXY()
+		{
+			switch (getXY())
+			{
+				case "middle":
+				restartText.x = x;
+				restartText.y = y;
+				break;
+
+				case "top left":
+				restartText.x = leftX + 240;
+				restartText.y = topY + 180;
+				break;
+
+				case "bottom left":
+				restartText.x = leftX + 240;
+				restartText.y = bottomY - 180;
+				break;
+				
+				case "top right":
+				restartText.x = rightX - 240;
+				restartText.y = topY + 180;
+				break;
+				
+				case "bottom right":
+				restartText.x = rightX - 240;
+				restartText.y = bottomY - 180;
+				break;
+
+				case "left":
+				restartText.x = leftX + 240;
+				restartText.y = y;
+				break;
+				
+				case "right":
+				restartText.x = rightX - 240;
+				restartText.y = y;
+				break;
+				
+				case "top":
+				restartText.x = x;
+				restartText.y = topY + 180;
+				break;
+				
+				case "bottom":
+				restartText.x = x;
+				restartText.y = bottomY - 180;
+				break;
+			}
 		}
 		
 		//Pick up powerup
@@ -241,16 +464,16 @@ package
 			{
 				if (heldPowerUp)
 				{
-					removeChild(curPowerUp);
+					userInterface.removeChild(curPowerUp);
 				}
 				
 				curPowerUp = pickedUp;
-				curPowerUp.x = x;
-				curPowerUp.y = y;
+				curPowerUp.x = userInterface.powerUpFrame.x;
+				curPowerUp.y = userInterface.powerUpFrame.y;
 				parent.removeChild(pickedUp);
 				heldPowerUp = true;
 				trace("Holding " + curPowerUp.name);
-				addChild(curPowerUp);
+				userInterface.addChild(curPowerUp);
 			}
 		}
 		
@@ -259,25 +482,38 @@ package
 		{
 			if (curPowerUp.name.indexOf("energy") >= 0)
 			{
-				speed = 15;
-				
-				if (!powerUpActive && currentStamina < maxStamina)
+				speed = 6;
+			}
+			if (curPowerUp.name.indexOf("coffee") >= 0)
+			{
+				if (key.isDown(key.SHIFT) && !cooldown)
 				{
-					cooldown = true;
+					speed = 8;
 				}
+				speed = 4;
+				curScene.speedMult = 0.5;
 			}
 			
 			if (powerUpTime > 0)
 			{
-				powerUpTime -= 10;
+				powerUpTime -= 10 * curScene.speedMult;
 			}
-			else if (powerUpTime == 0)
+			else if (powerUpTime <= 0)
 			{
 				powerUpActive = false;
 				powerUpTime = 1000;
 				removeEventListener(Event.ENTER_FRAME, usedPowerUp);
+				if (curPowerUp.name.indexOf("coffee") >= 0)
+				{
+					speed = 3;
+					curScene.speedMult = 1;
+				}
+				if (curPowerUp.name.indexOf("energy") >= 0)
+				{
+					speed = 3;
+				}
 				
-				parent.removeChild(curPowerUp);
+				userInterface.removeChild(curPowerUp);
 				heldPowerUp = false;
 				curPowerUp = new MovieClip;
 			}
@@ -293,118 +529,116 @@ package
 
 			//coordinates for debug purposes
 			//trace("x " + x + " " + parentClass.x + " width " + parentClassWidth + " y " + y + " " + parentClass.y + " height " + parentClassHeight)
+			if (playerAlive)
+			{
+				if (key.isDown(key.SHIFT) && !cooldown)
+				{
+					if (currentStamina > minStamina)
+					{
+						currentStamina -= 30 * curScene.speedMult;
+						staminaBar.width = currentStamina / 10;
+						//trace(currentStamina)
+					}
+					else if (currentStamina <= minStamina)
+					{
+						staminaColor = new ColorTransform(0,0,0,1,255,0,0,0);
+						staminaBar.transform.colorTransform = staminaColor;
+						cooldown = true;
+						trace("SPRINT COOLDOWN")
+					}
+					speed = 6;
+				}
+				else
+				{
+					if (currentStamina < maxStamina)
+					{
+						staminaBar.width = currentStamina / 10;
+						currentStamina += 10 * curScene.speedMult;
+						//trace(currentStamina)
+					}
+					else if (currentStamina == maxStamina)
+					{
+						staminaColor = new ColorTransform(0,0,0,1,0,255,0,0);
+						staminaBar.transform.colorTransform = staminaColor;
+						cooldown = false;
+					}
+					if (!powerUpActive && curPowerUp.name.indexOf("energy"))
+					{
+						speed = 3;
+					}
+				}
+				
+				if (key.isDown(key.SPACE) && !powerUpActive && heldPowerUp)
+				{
+					powerUpActive = true;
+					addEventListener(Event.ENTER_FRAME, usedPowerUp);
+				}
 
-			if (key.isDown(key.SHIFT) && !cooldown)
-			{
-				if (currentStamina > minStamina)
+				if (leftKey)
 				{
-					currentStamina -= 30;
-					//trace(currentStamina)
-				}
-				else if (currentStamina == minStamina)
-				{
-					cooldown = true;
-					trace("SPRINT COOLDOWN")
-				}
-				speed = 6;
-			}
-			else
-			{
-				if (currentStamina < maxStamina)
-				{
-					currentStamina += 10;
-					//trace(currentStamina)
-				}
-				else if (currentStamina == maxStamina)
-				{
-					cooldown = false;
-				}
-				speed = 3;
-			}
-
-			if (leftKey)
-			{
-				if (leftCollision)
-				{
-					//animationState = "left_stop";
-					//trace("Left is Blocked")
-				}
-				else
-				{
-					animationState = "left_move";
-					lastDirection = "left_stop";
-					x -= speed;
-					if (parentClass.x <= -3 && x <= parentClassWidth - 440 && parentClassWidth > 483)
-					//if (parentClass.x <= -2 && parentClass.x >= -480 && x <= 720)
+					if (leftCollision)
 					{
-						parentClass.x += speed;
+						//animationState = "left_stop";
+						//trace("Left is Blocked")
+					}
+					else
+					{
+						animationState = "left_move";
+						lastDirection = "left_stop";
+						x -= speed * curScene.speedMult;
 					}
 				}
-			}
-			if (rightKey)
-			{
-				if (rightCollision)
+				if (rightKey)
 				{
-					//animationState = "right_stop";
-					//trace("Right is Blocked")
-				}
-				else
-				{
-					animationState = "right_move";
-					lastDirection = "right_stop";
-					x += speed;
-					if (parentClass.x >= -parentClassWidth + 690 && x >= 240 && parentClassWidth > 483)
-					//if (parentClass.x >= -478 && x >= 240)
+					if (rightCollision)
 					{
-						parentClass.x -= speed;
+						//animationState = "right_stop";
+						//trace("Right is Blocked")
+					}
+					else
+					{
+						animationState = "right_move";
+						lastDirection = "right_stop";
+						x += speed * curScene.speedMult;
 					}
 				}
-			}
-			if (upKey)
-			{
-				if (upCollision)
+				if (upKey)
 				{
-					//animationState = "up_stop";
-					//trace("Up is Blocked")
-				}
-				else
-				{
-					animationState = "up_move";
-					lastDirection = "up_stop";
-					y -= speed;
-					if (parentClass.y <= -3 && y <= -parentClass.y + 180 && parentClassHeight > 363)
-					//if (parentClass.y <= 180 && y <= 180)
+					if (upCollision)
 					{
-						parentClass.y += speed;
+						//animationState = "up_stop";
+						//trace("Up is Blocked")
+					}
+					else
+					{
+						animationState = "up_move";
+						lastDirection = "up_stop";
+						y -= speed * curScene.speedMult;
 					}
 				}
-			}
-			if (downKey)
-			{
-				if(downCollision)
+				if (downKey)
 				{
-					//animationState = "down_stop";
-					//trace("Down is Blocked")
-				}
-				else
-				{
-					animationState = "down_move";
-					lastDirection = "down_stop";
-					y += speed;
-					if (parentClass.y >= -parentClassHeight + 530 && y >= 180 && parentClassHeight > 363)
+					if(downCollision)
 					{
-						parentClass.y -= speed;
+						//animationState = "down_stop";
+						//trace("Down is Blocked")
+					}
+					else
+					{
+						animationState = "down_move";
+						lastDirection = "down_stop";
+						y += speed * curScene.speedMult;
 					}
 				}
-			}
-			
-			if (!(downKey || upKey || rightKey || leftKey))
-			{
-				animationState = lastDirection;
-			}
-			
-			if (this.currentLabel != animationState){
-				this.gotoAndStop(animationState);
+				
+				if (!(downKey || upKey || rightKey || leftKey))
+				{
+					animationState = lastDirection;
+				}
+				
+				if (this.currentLabel != animationState){
+					this.gotoAndStop(animationState);
+				}
 			}
 		}
 	}

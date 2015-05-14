@@ -3,7 +3,6 @@ package
 	import KeyObject;
 	import flash.display.*;
 	import flash.events.*;
-	import flash.geom.Point;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.utils.Timer;
@@ -13,10 +12,11 @@ package
 		private var gameState:GameState;
 		private var stageRef:Stage;
 		public var player:Player;
+		public static var speedMult:Number = 1;
 		
 		private var cityForeground:CityForeground;
-		private var porche:Porche;
-		private var porcheTimer:Timer = new Timer(2000);		// 1000ms == 1second
+		private var cars:Cars;
+		private var carsTimer:Timer = new Timer(3000);		// 1000ms == 1second
 		
 		public static var objects:Array;
 		
@@ -37,8 +37,9 @@ package
 			cityForeground.y = 256;
 			addChild(cityForeground);
 			
-			porcheTimer.start();
-			porcheTimer.addEventListener(TimerEvent.TIMER, porcheTimerTick,false,0,true);
+			carsTimer.start();
+			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);
+			addEventListener(Event.ENTER_FRAME, mainLoop,false,0,true);
 			
 			//leaveSuburb.addEventListener(Event.ENTER_FRAME, sceneChange,false,0,true);
 		}
@@ -56,16 +57,37 @@ package
 			}
 		}
 		
-		private function porcheTimerTick(timerEvent:TimerEvent):void
+		private function mainLoop(e:Event)
+		{
+			if (objects == null)
+			{
+				carsTimer.stop();
+				carsTimer.removeEventListener(TimerEvent.TIMER, carsTimerTick);
+				//leaveCity.removeEventListener(Event.ENTER_FRAME, sceneChange);
+				removeEventListener(Event.ENTER_FRAME, mainLoop);
+			}
+			else if (!player.playerAlive)
+			{
+				for (var i = 0; i < objects.length; i++)
+				{
+					if (objects[i].name.indexOf("enemy") >= 0)
+					{
+						objects[i].removeEventListeners();
+					}
+				}
+			}
+		}
+		
+		private function carsTimerTick(timerEvent:TimerEvent):void
 		{
 			if (player.playerAlive)
 			{
-				porche = new Porche(SuburbScene); //Passing current scene to Porche class
-				porche.x = 980;
-				porche.y = 392;
-				porche.name = "enemy_car_" + objects.length;
-				addChild(porche);
-				objects.push(porche);
+				cars = new Cars(SuburbScene); //Passing current scene to Cars class
+				cars.x = 1060;
+				cars.y = 420;
+				cars.name = "enemy_car_" + objects.length;
+				addChild(cars);
+				objects.push(cars);
 			}
 		}
 		
@@ -73,11 +95,18 @@ package
 		{
 			if (leaveSuburb.hitTestObject(player))
 			{
-				porcheTimer.stop();
-				porcheTimer.removeEventListener(TimerEvent.TIMER, porcheTimerTick);
+				carsTimer.stop();
+				carsTimer.removeEventListener(TimerEvent.TIMER, carsTimerTick);
+				removeEventListener(Event.ENTER_FRAME, mainLoop);
 				leaveSuburb.removeEventListener(Event.ENTER_FRAME, sceneChange);
 				player.removeEventListeners();
-				porche.removeEventListeners();
+				for (var i = 0; i < objects.length; i++)
+				{
+					if (objects[i].name.indexOf("enemy") >= 0)
+					{
+						objects[i].removeEventListeners();
+					}
+				}
 				objects = null;
 				gameState.suburbScene2();
 				trace("Switch to Suburb 2");

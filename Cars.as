@@ -3,11 +3,11 @@ package
 	import flash.display.MovieClip;
 	import flash.events.*;
 	
-	public class Porche extends MovieClip
+	public class Cars extends MovieClip
 	{
 		private var curScene;
 		
-		public function Porche(scene)
+		public function Cars(scene)
 		{
 			curScene = scene;
 			
@@ -36,7 +36,7 @@ package
 			}
 			else
 			{
-				x -= 8;
+				x -= 8 * curScene.speedMult;
 			}
 		}
 
