@@ -4,7 +4,6 @@ package
 	import flash.events.*;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
-	import flash.utils.Timer;
 	
 	public class HomeScene extends MovieClip
 	{
@@ -12,7 +11,6 @@ package
 		private var stageRef:Stage;
 		public var player:Player;
 		public static var objects:Array;
-		public static var speedMult:Number = 1;
 		
 		public function HomeScene(passedClass:GameState, stageRef:Stage)
 		{
@@ -21,7 +19,7 @@ package
 			objects = new Array();
 			addObjects();
 
-			player = new Player(gameState, stageRef, HomeScene, this);
+			player = new Player(gameState, stageRef, HomeScene, this, 374, 84);
 			player.x = 374;
 			player.y = 84;
 			addChild(player);

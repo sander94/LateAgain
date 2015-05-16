@@ -12,7 +12,6 @@ package
 		private var gameState:GameState;
 		private var stageRef:Stage;
 		public var player:Player;
-		public static var speedMult:Number = 1;
 		
 		private var cityForeground:CityForeground;
 		private var cars:Cars;
@@ -27,7 +26,7 @@ package
 			objects = new Array();
 			addObjects();
 			
-			player = new Player(gameState, stageRef, CityScene, this);
+			player = new Player(gameState, stageRef, CityScene, this, 38, 346);
 			player.x = 38;
 			player.y = 346;
 			addChild(player);
@@ -66,7 +65,7 @@ package
 				//leaveCity.removeEventListener(Event.ENTER_FRAME, sceneChange);
 				removeEventListener(Event.ENTER_FRAME, mainLoop);
 			}
-			else if (!player.playerAlive)
+			else if (!Player.playerAlive)
 			{
 				for (var i = 0; i < objects.length; i++)
 				{
@@ -80,9 +79,9 @@ package
 		
 		private function carsTimerTick(timerEvent:TimerEvent):void
 		{
-			if (player.playerAlive)
+			if (Player.playerAlive)
 			{
-				cars = new Cars(SuburbScene); //Passing current scene to Cars class
+				cars = new Cars("left"); //Passing current scene to Cars class
 				cars.x = 1060;
 				cars.y = 420;
 				cars.name = "enemy_car_" + objects.length;

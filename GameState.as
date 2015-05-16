@@ -2,6 +2,8 @@ package
 {
 	import flash.display.*;
 	import flash.system.*;
+	import flash.events.*;
+	import flash.utils.Timer;
 	
 	public class GameState extends Sprite
 	{
@@ -12,6 +14,8 @@ package
 		private var _suburbScene2:SuburbScene2;
 		private var _slumScene:SlumScene;
 		private var _cityScene:CityScene;
+		public var gameTimeRemaining:Number = 300;
+		private var gameTimer:Timer = new Timer(1000);		// 1000ms == 1second
 		
 		public function GameState()
 		{
@@ -22,9 +26,21 @@ package
 			//slumScene();
 			//cityScene();
 		}
+
+		private function gameTimerTick(e:TimerEvent)
+		{
+			if (!Player.playerHit)
+			{
+				gameTimeRemaining -= 1 * Player.speedMult;
+			}
+		}
 		
 		public function startScene()
 		{
+			gameTimer.stop();
+			gameTimer = new Timer(1000);
+			gameTimeRemaining = 300;
+			gameTimer.removeEventListener(TimerEvent.TIMER, gameTimerTick)
 			removeScene();
 			_startScene = new StartScene(this, stage);
 			addChild(_startScene);
@@ -35,6 +51,9 @@ package
 			removeScene();
 			_homeScene = new HomeScene(this, stage);
 			addChild(_homeScene);
+
+			gameTimer.start();
+			gameTimer.addEventListener(TimerEvent.TIMER, gameTimerTick);
 		}
 		
 		public function suburbScene()

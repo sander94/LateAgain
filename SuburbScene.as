@@ -12,10 +12,10 @@ package
 		private var gameState:GameState;
 		private var stageRef:Stage;
 		public var player:Player;
-		public static var speedMult:Number = 1;
 
 		private var suburbForeground:SuburbForeground;
 		private var cars:Cars;
+		private var enemies:Enemies;
 		private var carsTimer:Timer = new Timer(3000);		// 1000ms == 1second
 		
 		public static var objects:Array;
@@ -27,15 +27,17 @@ package
 			objects = new Array();
 			addObjects();
 
-			player = new Player(gameState, stageRef, SuburbScene, this);
-			player.x = 100;
-			player.y = 340;
+			player = new Player(gameState, stageRef, SuburbScene, this, 91, 292);
+			player.x = 91;
+			player.y = 292;
 			addChild(player);
 
 			suburbForeground = new SuburbForeground;
 			suburbForeground.x = 480;
 			suburbForeground.y = 268;
 			addChild(suburbForeground);
+
+			//addEnemies();
 			
 			carsTimer.start();
 			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);
@@ -57,6 +59,18 @@ package
 			}
 		}
 
+		/*private function addEnemies()
+		{
+			enemies = new Enemies("granny", "right", 400, 292); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 400;//This is a testing location, change as you will
+			enemies.y = 292;
+			enemies.name = "enemy_granny_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+
+			//Add more enemies here
+		}*/
+
 		private function mainLoop(e:Event)
 		{
 			//removing all enemies if array is reset
@@ -67,7 +81,7 @@ package
 				leaveSuburb.removeEventListener(Event.ENTER_FRAME, sceneChange);
 				removeEventListener(Event.ENTER_FRAME, mainLoop);
 			}
-			else if (!player.playerAlive)
+			else if (!Player.playerAlive)
 			{
 				for (var i = 0; i < objects.length; i++)
 				{
@@ -81,9 +95,9 @@ package
 		
 		private function carsTimerTick(timerEvent:TimerEvent):void
 		{
-			if (player.playerAlive)
+			if (Player.playerAlive || !Player.playerHit)
 			{
-				cars = new Cars(SuburbScene); //Passing current scene to Cars class
+				cars = new Cars("left"); //Passing current scene to Cars class
 				cars.x = 1060;
 				cars.y = 420;
 				cars.name = "enemy_car_" + objects.length;

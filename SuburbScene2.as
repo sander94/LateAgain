@@ -12,7 +12,6 @@ package
 		private var gameState:GameState;
 		private var stageRef:Stage;
 		public var player:Player;
-		public static var speedMult:Number = 1;
 		
 		private var suburbForeground:SuburbForeground2;
 		private var cars:Cars;
@@ -27,13 +26,13 @@ package
 			objects = new Array();
 			addObjects();
 			
-			player = new Player(gameState, stageRef, SuburbScene2, this);
+			player = new Player(gameState, stageRef, SuburbScene2, this, 40, 142);
 			player.x = 40;
 			player.y = 142;
 			addChild(player);
 			
 			suburbForeground = new SuburbForeground2;
-			suburbForeground.x = 532,5;
+			suburbForeground.x = 532.5;
 			suburbForeground.y = 337;
 			addChild(suburbForeground);
 			

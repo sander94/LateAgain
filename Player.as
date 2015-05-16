@@ -17,6 +17,10 @@ package
 		private var speed:Number = 3;
 		private var userInterface:UI;
 		private var staminaBar:StaminaBar;
+		
+		public static var speedMult:Number = 1;
+		public static var playerX:Number;
+		public static var playerY:Number;
 
 		private var leftCollision:Boolean = false;
 		private var rightCollision:Boolean = false;
@@ -47,34 +51,45 @@ package
 		private var upKey;
 		private var downKey;
 		
-		public var playerAlive:Boolean = true;
+		public static var playerAlive:Boolean = true;
+		public static var playerHit:Boolean = false;
 		public var restartText:RestartText;
 		
 		private var parentClass;
-		private var parentClassWidth;
-		private var parentClassHeight;
+		private var parentClassWidth:Number;
+		private var parentClassHeight:Number;
 
-		private var topY;
-		private var bottomY;
-		private var leftX;
-		private var rightX;
+		private var topY:Number;
+		private var bottomY:Number;
+		private var leftX:Number;
+		private var rightX:Number;
+
+		private var startX:Number;
+		private var startY:Number;
 
 		private var staminaColor:ColorTransform;
 		
-		public function Player(passedClass:GameState, stageRef:Stage, scene, curClass)
+		public function Player(passedClass:GameState, stageRef:Stage, scene, curClass, passedX, passedY)
 		{
 			trace("in player")
 			this.stageRef = stageRef;
 			key = new KeyObject(stageRef);
 			gameState = passedClass;
+			playerAlive = true;
+
+			startX = passedX;
+			startY = passedY;
 
 			curScene = scene;
 			parentClass = curClass;
 			parentClassWidth = parentClass.width;
 			parentClassHeight = parentClass.height;
-			setCameraLimits();
 
-			
+			//Set the limits for camera movement
+			topY = parentClass.object_screenBlock01.y;
+			rightX = parentClass.object_screenBlock02.x;
+			bottomY = parentClass.object_screenBlock03.y;
+			leftX = parentClass.object_screenBlock04.x;
 
 			hitboxLeft.x = x - 6;
 			hitboxLeft.y = y;
@@ -96,9 +111,9 @@ package
 		}
 
 		//Hit detection
-		private function HitTestPointHor(e:Event)
+		private function hitTestPointHor(e:Event)
 		{
-			if (playerAlive)
+			if (playerAlive && !playerHit)
 			{
 				for (var i = 0; i < curScene.objects.length; i++)
 				{
@@ -152,9 +167,9 @@ package
 				}
 			}
 		}
-		private function HitTestPointVer(e:Event)
+		private function hitTestPointVer(e:Event)
 		{
-			if (playerAlive)
+			if (playerAlive && !playerHit)
 			{
 				for (var i = 0; i < curScene.objects.length; i++)
 				{
@@ -205,16 +220,7 @@ package
 			}
 		}
 
-		//Set limits for camera movement
-		private function setCameraLimits()
-		{
-			topY = parentClass.object_screenBlock01.y;
-			rightX = parentClass.object_screenBlock02.x;
-			bottomY = parentClass.object_screenBlock03.y;
-			leftX = parentClass.object_screenBlock04.x;
-		}
-
-		//Actual camera code
+		//Camera code
 		private function cameraFollowPlayer(e:Event)
 		{
 			if (parentClassHeight > 363 && parentClassWidth > 483)
@@ -313,8 +319,8 @@ package
 		//Remove EventListeners
 		public function removeEventListeners()
 		{
-			removeEventListener(Event.ENTER_FRAME, HitTestPointHor);
-			removeEventListener(Event.ENTER_FRAME, HitTestPointVer);
+			removeEventListener(Event.ENTER_FRAME, hitTestPointHor);
+			removeEventListener(Event.ENTER_FRAME, hitTestPointVer);
 			removeEventListener(Event.ENTER_FRAME, playerLoop);
 			removeEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
 			this.stageRef.removeChild(userInterface);
@@ -323,8 +329,8 @@ package
 		//Add EventListeners
 		public function addEventListeners()
 		{
-			addEventListener(Event.ENTER_FRAME, HitTestPointHor);
-			addEventListener(Event.ENTER_FRAME, HitTestPointVer);
+			addEventListener(Event.ENTER_FRAME, hitTestPointHor);
+			addEventListener(Event.ENTER_FRAME, hitTestPointVer);
 			addEventListener(Event.ENTER_FRAME, playerLoop);
 			addEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
 			userInterface = new UI;
@@ -369,7 +375,7 @@ package
 				}
 
 				//If enemy was car, game over
-				if (enemy.name.indexOf("car"))
+				if (enemy.name.indexOf("car") >= 0)
 				{
 					removeEventListeners();
 
@@ -379,11 +385,19 @@ package
 					
 					playerAlive = false;
 				}
-				/*Checking and processing of hitting other enemies
-				else if ()
+				else if (enemy.name.indexOf("granny") >= 0)
 				{
-				
-				}*/
+					removeEventListener(Event.ENTER_FRAME, playerLoop);
+					removeEventListener(Event.ENTER_FRAME, hitTestPointHor);
+					removeEventListener(Event.ENTER_FRAME, hitTestPointVer);
+					removeEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
+					
+					restartText = new RestartText;
+					restartTextXY();
+					parent.addChild(restartText);
+
+					playerHit = true;
+				}
 			}
 		}
 		
@@ -397,12 +411,25 @@ package
 				gameState.startScene();
 				curScene.objects = null;
 			}
-		}
-		
-		//Checks enemy type
-		private function checkEnemyType(enemy)
-		{
-			
+			if (key.isDown(key.SPACE) && playerAlive)
+			{
+				removeEventListener(Event.ENTER_FRAME, playerDown);
+
+				addEventListener(Event.ENTER_FRAME, hitTestPointHor);
+				addEventListener(Event.ENTER_FRAME, hitTestPointVer);
+				addEventListener(Event.ENTER_FRAME, playerLoop);
+				addEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
+
+				gameState.gameTimeRemaining -= 10; //Time penalty for being hit
+
+				x = startX;
+				y = startY;
+
+				playerHit = false;
+
+				parent.removeChild(restartText);
+			}
+
 		}
 
 		//X and Y coordinates for restart text
@@ -491,12 +518,12 @@ package
 					speed = 8;
 				}
 				speed = 4;
-				curScene.speedMult = 0.5;
+				speedMult = 0.5;
 			}
 			
 			if (powerUpTime > 0)
 			{
-				powerUpTime -= 10 * curScene.speedMult;
+				powerUpTime -= 10;
 			}
 			else if (powerUpTime <= 0)
 			{
@@ -506,7 +533,7 @@ package
 				if (curPowerUp.name.indexOf("coffee") >= 0)
 				{
 					speed = 3;
-					curScene.speedMult = 1;
+					speedMult = 1;
 				}
 				if (curPowerUp.name.indexOf("energy") >= 0)
 				{
@@ -522,20 +549,25 @@ package
 		//Player loop
 		private function playerLoop(e:Event)
 		{
+			//trace(userInterface.timeRemaining.text);
+			playerX = x;
+			playerY = y;
+			//userInterface.timeRemaining.text = String(gameState.gameTimeRemaining);
+
 			leftKey = key.isDown(key.LEFT), key.isDown(key.A);
 			rightKey = key.isDown(key.RIGHT), key.isDown(key.D);
 			upKey = key.isDown(key.UP), key.isDown(key.W);
 			downKey = key.isDown(key.DOWN), key.isDown(key.S);
 
 			//coordinates for debug purposes
-			//trace("x " + x + " " + parentClass.x + " width " + parentClassWidth + " y " + y + " " + parentClass.y + " height " + parentClassHeight)
-			if (playerAlive)
+			//trace("x " + x + " " + parentClass.x + " y " + y + " " + parentClass.y)
+			if (playerAlive && !playerHit)
 			{
 				if (key.isDown(key.SHIFT) && !cooldown)
 				{
 					if (currentStamina > minStamina)
 					{
-						currentStamina -= 30 * curScene.speedMult;
+						currentStamina -= 30 * speedMult;
 						staminaBar.width = currentStamina / 10;
 						//trace(currentStamina)
 					}
@@ -553,7 +585,7 @@ package
 					if (currentStamina < maxStamina)
 					{
 						staminaBar.width = currentStamina / 10;
-						currentStamina += 10 * curScene.speedMult;
+						currentStamina += 10 * speedMult;
 						//trace(currentStamina)
 					}
 					else if (currentStamina == maxStamina)
@@ -585,7 +617,7 @@ package
 					{
 						animationState = "left_move";
 						lastDirection = "left_stop";
-						x -= speed * curScene.speedMult;
+						x -= speed * speedMult;
 					}
 				}
 				if (rightKey)
@@ -599,7 +631,7 @@ package
 					{
 						animationState = "right_move";
 						lastDirection = "right_stop";
-						x += speed * curScene.speedMult;
+						x += speed * speedMult;
 					}
 				}
 				if (upKey)
@@ -613,7 +645,7 @@ package
 					{
 						animationState = "up_move";
 						lastDirection = "up_stop";
-						y -= speed * curScene.speedMult;
+						y -= speed * speedMult;
 					}
 				}
 				if (downKey)
@@ -627,7 +659,7 @@ package
 					{
 						animationState = "down_move";
 						lastDirection = "down_stop";
-						y += speed * curScene.speedMult;
+						y += speed * speedMult;
 					}
 				}
 				
