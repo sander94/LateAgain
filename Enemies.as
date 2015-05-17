@@ -78,57 +78,63 @@ package
 		//Hit detection
 		private function hitTestPointHor(e:Event)
 		{
-			for (var i = 0; i < Player.curScene.objects.length; i++)
+			if (Player.playerAlive)
 			{
-				//If hit check
-				if (Player.curScene.objects[i].hitTestObject(hitboxLeft) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0))
+				for (var i = 0; i < Player.curScene.objects.length; i++)
 				{
-					//Stop movement in that direction
-					leftCollision = true;
-					trace("leftCollision")
-					break;
-				}
-				else
-				{
-					leftCollision = false;
-				}
-				
-				if (Player.curScene.objects[i].hitTestObject(hitboxRight) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0))
-				{
-					rightCollision = true;
-					trace("rightCollision")
-					break;
-				}
-				else
-				{
-					rightCollision = false;
+					//If hit check
+					if (Player.curScene.objects[i].hitTestObject(hitboxLeft) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0))
+					{
+						//Stop movement in that direction
+						leftCollision = true;
+						trace("leftCollision")
+						break;
+					}
+					else
+					{
+						leftCollision = false;
+					}
+					
+					if (Player.curScene.objects[i].hitTestObject(hitboxRight) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0))
+					{
+						rightCollision = true;
+						trace("rightCollision")
+						break;
+					}
+					else
+					{
+						rightCollision = false;
+					}
 				}
 			}
 		}
 		private function hitTestPointVer(e:Event)
 		{
-			for (var i = 0; i < Player.curScene.objects.length; i++)
+			if (Player.playerAlive)
 			{
-				if (Player.curScene.objects[i].hitTestObject(hitboxUp) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0))
+				for (var i = 0; i < Player.curScene.objects.length; i++)
 				{
-					upCollision = true;
-					trace("upCollision")
-					break;
-				}
-				else
-				{
-					upCollision = false;
-				}
-				
-				if (Player.curScene.objects[i].hitTestObject(hitboxDown) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0))
-				{
-					downCollision = true;
-					trace("downCollision")
-					break;
-				}
-				else
-				{
-					downCollision = false;
+					if (Player.curScene.objects[i].hitTestObject(hitboxUp) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0))
+					{
+						upCollision = true;
+						trace("upCollision")
+						break;
+					}
+					else
+					{
+						upCollision = false;
+					}
+					
+					if (Player.curScene.objects[i].hitTestObject(hitboxDown) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0))
+					{
+						downCollision = true;
+						trace("downCollision")
+						break;
+					}
+					else
+					{
+						downCollision = false;
+					}
 				}
 			}
 		}
