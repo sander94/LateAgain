@@ -1,6 +1,7 @@
 package
 {
 	import KeyObject;
+	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.text.TextField;
@@ -37,7 +38,7 @@ package
 			suburbForeground.y = 268;
 			addChild(suburbForeground);
 
-			//addEnemies();
+			addEnemies();
 			
 			carsTimer.start();
 			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);
@@ -59,7 +60,7 @@ package
 			}
 		}
 
-		/*private function addEnemies()
+		private function addEnemies()
 		{
 			enemies = new Enemies("granny", "right", 400, 292); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
 			enemies.x = 400;//This is a testing location, change as you will
@@ -69,7 +70,7 @@ package
 			objects.push(enemies);
 
 			//Add more enemies here
-		}*/
+		}
 
 		private function mainLoop(e:Event)
 		{

@@ -7,16 +7,15 @@ package
 	{
 		public function Cars(driveDirection)
 		{
-			var _randomNumber:Number = Math.ceil(Math.random() * 10);
-			//trace("randomNumber: " + _randomNumber);
+			var typeRandomNumber:Number = Math.ceil(Math.random() * 10);
 			
-			if(_randomNumber < 5)
+			if(typeRandomNumber < 5)
 				this.gotoAndStop("audi_drive_" + driveDirection);
-			else if(_randomNumber >= 5 && _randomNumber < 6)
+			else if(typeRandomNumber >= 5 && typeRandomNumber < 6)
 				this.gotoAndStop("porche_drive_" + driveDirection);
-			else if(_randomNumber >= 6 && _randomNumber < 9)
+			else if(typeRandomNumber >= 6 && typeRandomNumber < 9)
 				this.gotoAndStop("taxi_drive_" + driveDirection);
-			else if(_randomNumber >= 9)
+			else if(typeRandomNumber >= 9)
 				this.gotoAndStop("cop_drive_" + driveDirection);
 			
 			addEventListener(Event.ENTER_FRAME, carMove,false,0,true)

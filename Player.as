@@ -600,7 +600,7 @@ package
 					}
 				}
 				
-				if (key.isDown(key.SPACE) && !powerUpActive && heldPowerUp)
+				if (key.isDown(key.E) && !powerUpActive && heldPowerUp)
 				{
 					powerUpActive = true;
 					addEventListener(Event.ENTER_FRAME, usedPowerUp);
