@@ -17,7 +17,7 @@ package
 		private var suburbForeground:SuburbForeground;
 		private var cars:Cars;
 		private var enemies:Enemies;
-		private var carsTimer:Timer = new Timer(3000);		// 1000ms == 1second
+		private var carsTimer:Timer = new Timer(2000);		// 1000ms == 1second
 		
 		public static var objects:Array;
 		
