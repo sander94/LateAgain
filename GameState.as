@@ -33,6 +33,7 @@ package
 			{
 				gameTimeRemaining -= 1 * Player.speedMult;
 			}
+			Player.userInterface.timeRemaining.text = String(Math.ceil(gameTimeRemaining));
 		}
 		
 		public function startScene()
@@ -52,6 +53,7 @@ package
 			_homeScene = new HomeScene(this, stage);
 			addChild(_homeScene);
 
+			Player.userInterface.timeRemaining.text = String(Math.ceil(gameTimeRemaining));
 			gameTimer.start();
 			gameTimer.addEventListener(TimerEvent.TIMER, gameTimerTick);
 		}
@@ -60,30 +62,34 @@ package
 		{
 			removeScene();
 			_suburbScene = new SuburbScene(this, stage);
-			//_suburbScene.y = -180;
 			addChild(_suburbScene);
+
+			Player.userInterface.timeRemaining.text = String(Math.ceil(gameTimeRemaining));
 		}
 		
 		public function suburbScene2()
 		{
 			removeScene();
 			_suburbScene2 = new SuburbScene2(this, stage);
-			//_suburbScene2.y = -180;
 			addChild(_suburbScene2);
+
+			Player.userInterface.timeRemaining.text = String(Math.ceil(gameTimeRemaining));
 		}
 		public function slumScene()
 		{
 			removeScene();
 			_slumScene = new SlumScene(this, stage);
-			//_slumScene.y = -50;
 			addChild(_slumScene);
+
+			Player.userInterface.timeRemaining.text = String(Math.ceil(gameTimeRemaining));
 		}
 		public function cityScene()
 		{
 			removeScene();
 			_cityScene = new CityScene(this, stage);
-			//_cityScene.y = -140;
 			addChild(_cityScene);
+
+			Player.userInterface.timeRemaining.text = String(Math.ceil(gameTimeRemaining));
 		}
 		
 		public function endScene()

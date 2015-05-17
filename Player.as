@@ -15,7 +15,7 @@ package
 		private var stageRef:Stage;
 		private var gameState:GameState;
 		private var speed:Number = 3;
-		private var userInterface:UI;
+		public static var userInterface:UI;
 		private var staminaBar:StaminaBar;
 		
 		public static var speedMult:Number = 1;
@@ -44,7 +44,7 @@ package
 		public var curPowerUp:MovieClip = new MovieClip;
 		private var powerUpTime:int = 1000;
 		public var powerUpActive:Boolean = false;
-		private var curScene;
+		public static var curScene:Class;
 		
 		private var leftKey;
 		private var rightKey;
@@ -100,7 +100,7 @@ package
 			addChild(hitboxRight);
 			
 			hitboxDown.x = x;
-			hitboxDown.y = x + 10;
+			hitboxDown.y = y + 10;
 			addChild(hitboxDown);
 			
 			hitboxUp.x = x;
@@ -385,7 +385,8 @@ package
 					
 					playerAlive = false;
 				}
-				else if (enemy.name.indexOf("granny") >= 0)
+				//Othervise reset player and give time penalty
+				else
 				{
 					removeEventListener(Event.ENTER_FRAME, playerLoop);
 					removeEventListener(Event.ENTER_FRAME, hitTestPointHor);
@@ -429,7 +430,6 @@ package
 
 				parent.removeChild(restartText);
 			}
-
 		}
 
 		//X and Y coordinates for restart text
@@ -549,11 +549,9 @@ package
 		//Player loop
 		private function playerLoop(e:Event)
 		{
-			//trace(userInterface.timeRemaining.text);
 			playerX = x;
 			playerY = y;
-			//userInterface.timeRemaining.text = String(gameState.gameTimeRemaining);
-
+			
 			leftKey = key.isDown(key.LEFT), key.isDown(key.A);
 			rightKey = key.isDown(key.RIGHT), key.isDown(key.D);
 			upKey = key.isDown(key.UP), key.isDown(key.W);
