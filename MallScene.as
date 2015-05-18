@@ -76,7 +76,7 @@ package
 		{
 			//removing all enemies if array is reset
 			if (objects == null)
-			{
+			{  
 				carsTimer.stop();
 				carsTimer.removeEventListener(TimerEvent.TIMER, carsTimerTick);
 				//leaveMall.removeEventListener(Event.ENTER_FRAME, sceneChange);

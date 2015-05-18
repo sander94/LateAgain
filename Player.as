@@ -71,7 +71,7 @@ package
 		
 		public function Player(passedClass:GameState, stageRef:Stage, scene, curClass, passedX, passedY)
 		{
-			trace("in player")
+			//trace("in player")
 			this.stageRef = stageRef;
 			key = new KeyObject(stageRef);
 			gameState = passedClass;

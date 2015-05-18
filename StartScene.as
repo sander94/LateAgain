@@ -28,7 +28,9 @@
 			_gameState = passedClass;
 			this.stageRef = stageRef;
 			
-			_gameState.introChannel = _gameState.introMusic.play(0, 10, _gameState.volume);
+			_gameState.volume.volume = 0.1;
+			_gameState.musicChannel.stop()
+			_gameState.musicChannel = _gameState.introMusic.play(0, 10, _gameState.volume);
 			
 			addEventListener(Event.ENTER_FRAME, mainLoop);
 		}

@@ -32,6 +32,10 @@ package
 			player.x = 91;
 			player.y = 292;
 			addChild(player);
+			
+			gameState.volume.volume = 0.4;
+			gameState.musicChannel.stop()
+			gameState.musicChannel = gameState.stageMusic.play(0, 10, gameState.volume);
 
 			suburbForeground = new SuburbForeground;
 			suburbForeground.x = 480;
@@ -64,7 +68,7 @@ package
 		{
 			enemies = new Enemies("granny", "down", 380, 220); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
 			enemies.x = 326;//This is a testing location, change as you will
-			enemies.y = 200;
+			enemies.y = 250;
 			enemies.name = "enemy_granny_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);

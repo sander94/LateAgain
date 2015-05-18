@@ -23,8 +23,9 @@ package
 		private var gameTimer:Timer = new Timer(1000);		// 1000ms == 1second
 		
 		public var introMusic:Sound = new MusicIntro;							// reference to imported music in Flash library
-		public var volume:SoundTransform = new SoundTransform(0.2, 0);			// volume control and panning
-		public var introChannel:SoundChannel = new SoundChannel;				// needed to control sound beyond the basic .play() command
+		public var stageMusic:Sound = new MusicStage2;
+		public var volume:SoundTransform = new SoundTransform(0.1, 0);			// volume control and panning
+		public var musicChannel:SoundChannel = new SoundChannel;				// needed to control sound beyond the basic .play() command
 		
 		public function GameState()
 		{

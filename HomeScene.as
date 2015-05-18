@@ -49,7 +49,7 @@ package
 				leaveHome.removeEventListener(Event.ENTER_FRAME, sceneChange);
 				player.removeEventListeners();
 				objects = null;
-				gameState.introChannel.stop();
+				gameState.musicChannel.stop();
 				gameState.suburbScene();
 				trace("WOOOOOOOP");
 			}
