@@ -1,8 +1,11 @@
 package
 {
 	import flash.display.*;
-	import flash.system.*;
 	import flash.events.*;
+	import flash.media.Sound;
+	import flash.media.SoundChannel;
+	import flash.media.SoundTransform;
+	import flash.system.*;
 	import flash.utils.Timer;
 	
 	public class GameState extends Sprite
@@ -14,17 +17,24 @@ package
 		private var _suburbScene2:SuburbScene2;
 		private var _slumScene:SlumScene;
 		private var _cityScene:CityScene;
+		private var _mallScene:MallScene;
+		
 		public var gameTimeRemaining:Number = 300;
 		private var gameTimer:Timer = new Timer(1000);		// 1000ms == 1second
 		
+		public var introMusic:Sound = new MusicIntro;							// reference to imported music in Flash library
+		public var volume:SoundTransform = new SoundTransform(0.2, 0);			// volume control and panning
+		public var introChannel:SoundChannel = new SoundChannel;				// needed to control sound beyond the basic .play() command
+		
 		public function GameState()
 		{
-			//startScene();
+			startScene();
 			//homeScene();
 			//suburbScene();
-			suburbScene2();
+			//suburbScene2();
 			//slumScene();
 			//cityScene();
+			//mallScene();
 		}
 
 		private function gameTimerTick(e:TimerEvent)
@@ -89,6 +99,14 @@ package
 			_cityScene = new CityScene(this, stage);
 			addChild(_cityScene);
 
+			Player.userInterface.timeRemaining.text = String(Math.ceil(gameTimeRemaining));
+		}
+		public function mallScene()
+		{
+			removeScene();
+			_mallScene = new MallScene(this, stage);
+			addChild(_mallScene);
+			
 			Player.userInterface.timeRemaining.text = String(Math.ceil(gameTimeRemaining));
 		}
 		
