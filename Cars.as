@@ -8,7 +8,7 @@ package
 		public function Cars(driveDirection)
 		{
 			var typeRandomNumber:Number = Math.ceil(Math.random() * 10);
-			trace("randomNumber: " +typeRandomNumber)
+			//trace("randomNumber: " +typeRandomNumber)
 			
 			if(typeRandomNumber < 4)
 				this.gotoAndStop("audi_drive_" + driveDirection);

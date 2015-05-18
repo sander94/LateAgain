@@ -60,18 +60,26 @@ package
 				case "granny":
 				speed = 2;
 				addEventListener(Event.ENTER_FRAME, patrol,false,0,true);
-				patrolTimer = new Timer(1000);
+				patrolTimer = new Timer(1600);
 				patrolTimer.start();
 				patrolTimer.addEventListener(TimerEvent.TIMER, patrolTimerTick,false,0,true);
 				break;
 
-				/*case "enemy2":
-				speed = 3;
+				case "nazi":
+				speed = 2;
 				addEventListener(Event.ENTER_FRAME, patrol,false,0,true);
-				patrolTimer = new Timer(1500);
+				patrolTimer = new Timer(2000);
 				patrolTimer.start();
 				patrolTimer.addEventListener(TimerEvent.TIMER, patrolTimerTick,false,0,true);
-				break;*/
+				break;
+				
+				case "suit":
+				speed = 2;
+				addEventListener(Event.ENTER_FRAME, patrol,false,0,true);
+				patrolTimer = new Timer(2400);
+				patrolTimer.start();
+				patrolTimer.addEventListener(TimerEvent.TIMER, patrolTimerTick,false,0,true);
+				break;
 			}
 		}
 
@@ -147,7 +155,7 @@ package
 
 				switch (enemyType) //Switch statement only for enemies that will chace player
 				{
-					case "granny":
+					case "suit":
 					addEventListener(Event.ENTER_FRAME, chaser,false,0,true);
 					patrolTimer.removeEventListener(TimerEvent.TIMER, patrolTimerTick);
 					removeEventListener(Event.ENTER_FRAME, patrol);
@@ -155,9 +163,13 @@ package
 					returnToStart = false;
 					break;
 
-					/*case "enemy3":
+					case "nazi":
 					addEventListener(Event.ENTER_FRAME, chaser,false,0,true);
-					break;*/
+					patrolTimer.removeEventListener(TimerEvent.TIMER, patrolTimerTick);
+					removeEventListener(Event.ENTER_FRAME, patrol);
+					patrolTimer.stop();
+					returnToStart = false;
+					break;
 				}
 			}
 			else

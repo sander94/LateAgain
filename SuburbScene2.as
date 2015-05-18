@@ -15,7 +15,8 @@ package
 		
 		private var suburbForeground:SuburbForeground2;
 		private var cars:Cars;
-		private var carsTimer:Timer = new Timer(3000);		// 1000ms == 1second
+		private var carsTimer:Timer = new Timer(2400);		// 1000ms == 1second
+		private var enemies:Enemies;
 		
 		public static var objects:Array;
 		
@@ -36,8 +37,10 @@ package
 			suburbForeground.y = 337;
 			addChild(suburbForeground);
 			
-			/*carsTimer.start();
-			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);*/
+			addEnemies();
+			
+			carsTimer.start();
+			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);
 			addEventListener(Event.ENTER_FRAME, mainLoop,false,0,true);
 			
 			leaveSuburb2.addEventListener(Event.ENTER_FRAME, sceneChange,false,0,true);
@@ -56,16 +59,28 @@ package
 			}
 		}
 		
+		private function addEnemies()
+		{
+			enemies = new Enemies("granny", "up", 420, 250); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 422;								//This is a testing location, change as you will
+			enemies.y = 290;
+			enemies.name = "enemy_granny_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
+			//Add more enemies here
+		}
+		
 		private function mainLoop(e:Event)
 		{
-			/*if (objects == null)
+			if (objects == null)
 			{
 				carsTimer.stop();
 				carsTimer.removeEventListener(TimerEvent.TIMER, carsTimerTick);
 				leaveSuburb2.removeEventListener(Event.ENTER_FRAME, sceneChange);
 				removeEventListener(Event.ENTER_FRAME, mainLoop);
 			}
-			else if (!player.playerAlive)
+			else if (!Player.playerAlive)
 			{
 				for (var i = 0; i < objects.length; i++)
 				{
@@ -74,38 +89,38 @@ package
 						objects[i].removeEventListeners();
 					}
 				}
-			}*/
+			}
 		}
 		
-		/*private function carsTimerTick(timerEvent:TimerEvent):void
+		private function carsTimerTick(timerEvent:TimerEvent):void
 		{
-			if (player.playerAlive)
+			if (Player.playerAlive)
 			{
-				cars = new Cars(SuburbScene); //Passing current scene to Cars class
+				cars = new Cars("left"); //Passing direction to Cars class
 				cars.x = 1060;
-				cars.y = 420;
+				cars.y = 50;
 				cars.name = "enemy_car_" + objects.length;
 				addChild(cars);
 				objects.push(cars);
 			}
-		}*/
+		}
 		
 		public function sceneChange(event:Event)
 		{
 			if (leaveSuburb2.hitTestObject(player))
 			{
-				/*carsTimer.stop();
+				carsTimer.stop();
 				carsTimer.removeEventListener(TimerEvent.TIMER, carsTimerTick);
-				removeEventListener(Event.ENTER_FRAME, mainLoop);*/
+				removeEventListener(Event.ENTER_FRAME, mainLoop);
 				leaveSuburb2.removeEventListener(Event.ENTER_FRAME, sceneChange);
 				player.removeEventListeners();
-				/*for (var i = 0; i < objects.length; i++)
+				for (var i = 0; i < objects.length; i++)
 				{
 					if (objects[i].name.indexOf("enemy") >= 0)
 					{
 						objects[i].removeEventListeners();
 					}
-				}*/
+				}
 				objects = null;
 				gameState.slumScene();
 				trace("GAME CONTINUE TIME LOOOOOOOOOOOP");
