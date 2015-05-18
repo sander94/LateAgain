@@ -35,21 +35,15 @@ package
 		private var animationState:String = "down_stop";
 		private var lastDirection:String = "down_stop"; 	// player facing when not moving
 		
-		private var maxStamina:int = 1200;					// sprint meter and cooldown variables for Shift key
-		private var minStamina:int = 0;
-		private var currentStamina:int = maxStamina;
-		private var cooldown:Boolean = false;
-		
-		private var heldPowerUp:Boolean = false;
-		public var curPowerUp:MovieClip = new MovieClip;
-		private var powerUpTime:int = 1000;
-		public var powerUpActive:Boolean = false;
 		public static var curScene:Class;
 		
 		private var leftKey;
 		private var rightKey;
 		private var upKey;
 		private var downKey;
+
+		private var energyDrink:MovieClip = new EnergyDrink;
+		private var coffee:MovieClip = new Coffee;
 		
 		public static var playerAlive:Boolean = true;
 		public static var playerHit:Boolean = false;
@@ -338,15 +332,40 @@ package
 			staminaBar = new StaminaBar;
 			staminaBar.x = -65;
 			userInterface.staminaFrame.addChildAt(staminaBar,0);
-			staminaColor = new ColorTransform(0,0,0,1,0,255,0,0);
-			staminaBar.transform.colorTransform = staminaColor;
+			if (!gameState.cooldown)
+			{
+				staminaColor = new ColorTransform(0,0,0,1,0,255,0,0);
+				staminaBar.transform.colorTransform = staminaColor;
+			}
+			else
+			{
+				staminaColor = new ColorTransform(0,0,0,1,255,0,0,0);
+				staminaBar.transform.colorTransform = staminaColor;
+			}
+			
+			if (gameState.curPowerUp.name.indexOf("energy") >= 0)
+			{
+				energyDrink.name = "power_energy";
+				gameState.curPowerUp = energyDrink;
+				userInterface.powerUpFrame.addChild(gameState.curPowerUp);
+			}
+			else if (gameState.curPowerUp.name.indexOf("coffee") >= 0)
+			{
+				coffee.name = "power_coffee";
+				gameState.curPowerUp = coffee;
+				userInterface.powerUpFrame.addChild(gameState.curPowerUp);
+			}
+			if (gameState.powerUpActive)
+			{
+				addEventListener(Event.ENTER_FRAME, usedPowerUp);
+			}
 		}
 
 		//Collision with enemy
 		private function hitEnemy(enemy, direction)
 		{
 			//Check if powerup is active and that it is energy drink (immortality)
-			if (powerUpActive && curPowerUp.name.indexOf("energy") >= 0)
+			if (gameState.powerUpActive && gameState.curPowerUp.name.indexOf("energy") >= 0)
 			{
 				trace("Immune");
 			}
@@ -487,62 +506,66 @@ package
 		//Pick up powerup
 		private function pickedUpPowerUp(pickedUp)
 		{
-			if (!powerUpActive)
+			if (!gameState.powerUpActive)
 			{
-				if (heldPowerUp)
+				if (gameState.heldPowerUp)
 				{
-					userInterface.removeChild(curPowerUp);
+					userInterface.powerUpFrame.removeChild(gameState.curPowerUp);
 				}
 				
-				curPowerUp = pickedUp;
-				curPowerUp.x = userInterface.powerUpFrame.x;
-				curPowerUp.y = userInterface.powerUpFrame.y;
+				gameState.curPowerUp = pickedUp;
+				gameState.curPowerUp.x = 0;
+				gameState.curPowerUp.y = 0;
 				parent.removeChild(pickedUp);
-				heldPowerUp = true;
-				trace("Holding " + curPowerUp.name);
-				userInterface.addChild(curPowerUp);
+				gameState.heldPowerUp = true;
+				trace("Holding " + gameState.curPowerUp.name);
+				userInterface.powerUpFrame.addChild(gameState.curPowerUp);
 			}
 		}
 		
 		//Use powerup
 		private function usedPowerUp(e:Event)
 		{
-			if (curPowerUp.name.indexOf("energy") >= 0)
+			if (gameState.powerUpActive)
 			{
-				speed = 6;
-			}
-			if (curPowerUp.name.indexOf("coffee") >= 0)
-			{
-				if (key.isDown(key.SHIFT) && !cooldown)
+				if (gameState.curPowerUp.name.indexOf("energy") >= 0)
 				{
-					speed = 8;
+					speed = 6;
 				}
-				speed = 4;
-				speedMult = 0.5;
-			}
-			
-			if (powerUpTime > 0)
-			{
-				powerUpTime -= 10;
-			}
-			else if (powerUpTime <= 0)
-			{
-				powerUpActive = false;
-				powerUpTime = 1000;
-				removeEventListener(Event.ENTER_FRAME, usedPowerUp);
-				if (curPowerUp.name.indexOf("coffee") >= 0)
+				if (gameState.curPowerUp.name.indexOf("coffee") >= 0)
 				{
-					speed = 3;
-					speedMult = 1;
-				}
-				if (curPowerUp.name.indexOf("energy") >= 0)
-				{
-					speed = 3;
+					if (key.isDown(key.SHIFT) && !gameState.cooldown)
+					{
+						speed = 8;
+					}
+					speed = 4;
+					speedMult = 0.5;
 				}
 				
-				userInterface.removeChild(curPowerUp);
-				heldPowerUp = false;
-				curPowerUp = new MovieClip;
+				if (gameState.powerUpTime > 0)
+				{
+					gameState.powerUpTime -= 10;
+				}
+				else if (gameState.powerUpTime <= 0)
+				{
+					removeEventListener(Event.ENTER_FRAME, usedPowerUp);
+					gameState.powerUpActive = false;
+					gameState.powerUpTime = 1000;
+					
+					if (gameState.curPowerUp.name.indexOf("coffee") >= 0)
+					{
+						speed = 3;
+						speedMult = 1;
+					}
+					if (gameState.curPowerUp.name.indexOf("energy") >= 0)
+					{
+						speed = 3;
+					}
+					
+					userInterface.powerUpFrame.removeChild(gameState.curPowerUp);
+					gameState.heldPowerUp = false;
+					gameState.curPowerUp = new MovieClip;
+				}
 			}
 		}
 		
@@ -561,46 +584,46 @@ package
 			//trace("x " + x + " " + parentClass.x + " y " + y + " " + parentClass.y)
 			if (playerAlive && !playerHit)
 			{
-				if (key.isDown(key.SHIFT) && !cooldown)
+				if (key.isDown(key.SHIFT) && !gameState.cooldown)
 				{
-					if (currentStamina > minStamina)
+					if (gameState.currentStamina > gameState.minStamina)
 					{
-						currentStamina -= 30 * speedMult;
-						staminaBar.width = currentStamina / 10;
-						//trace(currentStamina)
+						gameState.currentStamina -= 30 * speedMult;
+						staminaBar.width = gameState.currentStamina / 10;
+						//trace(gameState.currentStamina)
 					}
-					else if (currentStamina <= minStamina)
+					else if (gameState.currentStamina <= gameState.minStamina)
 					{
 						staminaColor = new ColorTransform(0,0,0,1,255,0,0,0);
 						staminaBar.transform.colorTransform = staminaColor;
-						cooldown = true;
+						gameState.cooldown = true;
 						trace("SPRINT COOLDOWN")
 					}
 					speed = 6;
 				}
 				else
 				{
-					if (currentStamina < maxStamina)
+					if (gameState.currentStamina < gameState.maxStamina)
 					{
-						staminaBar.width = currentStamina / 10;
-						currentStamina += 10 * speedMult;
-						//trace(currentStamina)
+						staminaBar.width = gameState.currentStamina / 10;
+						gameState.currentStamina += 10 * speedMult;
+						//trace(gameState.currentStamina)
 					}
-					else if (currentStamina == maxStamina)
+					else if (gameState.currentStamina == gameState.maxStamina)
 					{
 						staminaColor = new ColorTransform(0,0,0,1,0,255,0,0);
 						staminaBar.transform.colorTransform = staminaColor;
-						cooldown = false;
+						gameState.cooldown = false;
 					}
-					if (!powerUpActive && curPowerUp.name.indexOf("energy"))
+					if (!gameState.powerUpActive && gameState.curPowerUp.name.indexOf("energy"))
 					{
 						speed = 3;
 					}
 				}
 				
-				if (key.isDown(key.E) && !powerUpActive && heldPowerUp)
+				if (key.isDown(key.E) && !gameState.powerUpActive && gameState.heldPowerUp)
 				{
-					powerUpActive = true;
+					gameState.powerUpActive = true;
 					addEventListener(Event.ENTER_FRAME, usedPowerUp);
 				}
 

@@ -91,7 +91,7 @@ package
 				for (var i = 0; i < Player.curScene.objects.length; i++)
 				{
 					//If hit check
-					if (Player.curScene.objects[i].hitTestObject(hitboxLeft) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0))
+					if (Player.curScene.objects[i].hitTestObject(hitboxLeft) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0) && !(Player.curScene.objects[i].name.indexOf("power") >= 0))
 					{
 						//Stop movement in that direction
 						leftCollision = true;
@@ -103,7 +103,7 @@ package
 						leftCollision = false;
 					}
 					
-					if (Player.curScene.objects[i].hitTestObject(hitboxRight) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0))
+					if (Player.curScene.objects[i].hitTestObject(hitboxRight) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0) && !(Player.curScene.objects[i].name.indexOf("power") >= 0))
 					{
 						rightCollision = true;
 						trace("rightCollision")
@@ -122,7 +122,7 @@ package
 			{
 				for (var i = 0; i < Player.curScene.objects.length; i++)
 				{
-					if (Player.curScene.objects[i].hitTestObject(hitboxUp) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0))
+					if (Player.curScene.objects[i].hitTestObject(hitboxUp) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0) && !(Player.curScene.objects[i].name.indexOf("power") >= 0))
 					{
 						upCollision = true;
 						trace("upCollision")
@@ -133,7 +133,7 @@ package
 						upCollision = false;
 					}
 					
-					if (Player.curScene.objects[i].hitTestObject(hitboxDown) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0))
+					if (Player.curScene.objects[i].hitTestObject(hitboxDown) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0) && !(Player.curScene.objects[i].name.indexOf("power") >= 0))
 					{
 						downCollision = true;
 						trace("downCollision")
@@ -170,6 +170,9 @@ package
 					patrolTimer.stop();
 					returnToStart = false;
 					break;
+
+					default:
+					break;
 				}
 			}
 			else
@@ -182,7 +185,6 @@ package
 		{
 			if (inRange)//If player in range, chase
 			{
-
 				if (Player.playerX > x + 3 && !rightCollision)
 				{
 					this.gotoAndStop(enemyType + "_move_right");
@@ -230,7 +232,6 @@ package
 				{
 					removeEventListener(Event.ENTER_FRAME, chaser);
 					addEventListener(Event.ENTER_FRAME, patrol,false,0,true);
-					patrolTimer = new Timer(1000);
 					patrolTimer.start();
 					patrolTimer.addEventListener(TimerEvent.TIMER, patrolTimerTick,false,0,true);
 				}
@@ -297,16 +298,13 @@ package
 
 		private function patrolTimerTick(timerEvent:TimerEvent):void//Every time timer runs to 0, change patrol direction
 		{
-			if (!inRange)
+			if (returnToStart)
 			{
-				if (returnToStart)
-				{
-					returnToStart = false;
-				}
-				else
-				{
-					returnToStart = true;
-				}
+				returnToStart = false;
+			}
+			else
+			{
+				returnToStart = true;
 			}
 		}
 
@@ -316,8 +314,8 @@ package
 			removeEventListener(Event.ENTER_FRAME, patrol);
 			removeEventListener(Event.ENTER_FRAME, playerInRange);
 			patrolTimer.removeEventListener(TimerEvent.TIMER, patrolTimerTick);
-			//removeEventListener(Event.ENTER_FRAME, hitTestPointHor);
-			//removeEventListener(Event.ENTER_FRAME, hitTestPointVer);
+			removeEventListener(Event.ENTER_FRAME, hitTestPointHor);
+			removeEventListener(Event.ENTER_FRAME, hitTestPointVer);
 		}
 	}
 }

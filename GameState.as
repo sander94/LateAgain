@@ -18,6 +18,16 @@ package
 		private var _slumScene:SlumScene;
 		private var _cityScene:CityScene;
 		private var _mallScene:MallScene;
+
+		public var heldPowerUp:Boolean = false;				//moved powerup stuff here so that they are stored from scene to scene
+		public var curPowerUp:MovieClip = new MovieClip;
+		public var powerUpTime:int = 1000;
+		public var powerUpActive:Boolean = false;
+
+		public var maxStamina:int = 1200;					// sprint meter and cooldown variables for Shift key
+		public var minStamina:int = 0;						// moved here so stamina status is stored from scene to scene
+		public var currentStamina:int = maxStamina;
+		public var cooldown:Boolean = false;
 		
 		public var gameTimeRemaining:Number = 300;
 		private var gameTimer:Timer = new Timer(1000);		// 1000ms == 1second
@@ -36,6 +46,7 @@ package
 			//slumScene();
 			//cityScene();
 			//mallScene();
+			//endScene();
 		}
 
 		private function gameTimerTick(e:TimerEvent)
@@ -113,8 +124,10 @@ package
 		
 		public function endScene()
 		{
-			// TODO Auto Generated method stub
-			
+			gameTimer.stop();
+			removeScene();
+			_endScene = new EndScene(this, stage);
+			addChild(_endScene);
 		}
 
 		public function removeScene()
