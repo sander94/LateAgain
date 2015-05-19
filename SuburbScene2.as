@@ -15,8 +15,9 @@ package
 		
 		private var suburbForeground:SuburbForeground2;
 		private var cars:Cars;
-		private var carsTimer:Timer = new Timer(2400);		// 1000ms == 1second
+		private var carsTimer:Timer = new Timer(2000);		// 1000ms == 1second
 		private var enemies:Enemies;
+		private var carDirection:String = "left";
 		
 		public static var objects:Array;
 		
@@ -96,9 +97,18 @@ package
 		{
 			if (Player.playerAlive)
 			{
+				carDirection = "left";
 				cars = new Cars("left"); //Passing direction to Cars class
 				cars.x = 1060;
 				cars.y = 50;
+				cars.name = "enemy_car_" + objects.length;
+				addChild(cars);
+				objects.push(cars);
+				
+				carDirection = "left";
+				cars = new Cars(carDirection);
+				cars.x = 1060;
+				cars.y = 396;
 				cars.name = "enemy_car_" + objects.length;
 				addChild(cars);
 				objects.push(cars);

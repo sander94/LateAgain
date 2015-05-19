@@ -39,13 +39,13 @@ package
 		
 		public function GameState()
 		{
-			startScene();
+			//startScene();
 			//homeScene();
 			//suburbScene();
 			//suburbScene2();
 			//slumScene();
 			//cityScene();
-			//mallScene();
+			mallScene();
 			//endScene();
 		}
 

@@ -17,6 +17,7 @@ package
 		private var cars:Cars;
 		private var carsTimer:Timer = new Timer(1200);		// 1000ms == 1second
 		private var enemies:Enemies;
+		private var carDirection:String = "left";
 		
 		public static var objects:Array;
 		
@@ -68,13 +69,27 @@ package
 			addChild(enemies);
 			objects.push(enemies);
 			
-			enemies = new Enemies("suit", "right", 300, 240); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies = new Enemies("suit", "right", 300, 238); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
 			enemies.x = 300;//This is a testing location, change as you will
-			enemies.y = 240;
+			enemies.y = 238;
 			enemies.name = "enemy_suit_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
-			//Add more enemies here
+			
+			enemies = new Enemies("suit", "up", 716, 250); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 716;//This is a testing location, change as you will
+			enemies.y = 250;
+			enemies.name = "enemy_suit_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
+			enemies = new Enemies("granny", "down", 532, 306); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 536;//This is a testing location, change as you will
+			enemies.y = 312;
+			enemies.name = "enemy_granny_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
 		}
 		
 		private function mainLoop(e:Event)
@@ -102,9 +117,18 @@ package
 		{
 			if (Player.playerAlive)
 			{
-				cars = new Cars("left"); //Passing current scene to Cars class
+				carDirection = "left";
+				cars = new Cars(carDirection); //Passing direction to Cars class
 				cars.x = 1060;
-				cars.y = 400;
+				cars.y = 392;
+				cars.name = "enemy_car_" + objects.length;
+				addChild(cars);
+				objects.push(cars);
+				
+				carDirection = "right";
+				cars = new Cars(carDirection);
+				cars.x = -40;
+				cars.y = 450;
 				cars.name = "enemy_car_" + objects.length;
 				addChild(cars);
 				objects.push(cars);

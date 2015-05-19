@@ -17,7 +17,8 @@ package
 		private var mallForeground:MallForeground;
 		private var cars:Cars;
 		private var enemies:Enemies;
-		private var carsTimer:Timer = new Timer(2000);		// 1000ms == 1second
+		private var carsTimer:Timer = new Timer(1500);		// 1000ms == 1second
+		private var carDirection:String = "left";
 		
 		public static var objects:Array;
 		
@@ -44,7 +45,7 @@ package
 			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);
 			addEventListener(Event.ENTER_FRAME, mainLoop,false,0,true);
 			
-			//leaveSuburb.addEventListener(Event.ENTER_FRAME, sceneChange,false,0,true);
+			leaveMall.addEventListener(Event.ENTER_FRAME, sceneChange,false,0,true);
 		}
 		
 		//Add collidable objects to objects array
@@ -66,6 +67,27 @@ package
 			enemies.x = 326;//This is a testing location, change as you will
 			enemies.y = 180;
 			enemies.name = "enemy_granny_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
+			enemies = new Enemies("granny", "up", 682, 338); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 682;//This is a testing location, change as you will
+			enemies.y = 338;
+			enemies.name = "enemy_granny_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
+			enemies = new Enemies("suit", "right", 624, 132); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 624;//This is a testing location, change as you will
+			enemies.y = 132;
+			enemies.name = "enemy_suit_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
+			enemies = new Enemies("suit", "left", 710, 154); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 710;//This is a testing location, change as you will
+			enemies.y = 154;
+			enemies.name = "enemy_suit_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
 			
@@ -98,22 +120,31 @@ package
 		{
 			if (Player.playerAlive || !Player.playerHit)
 			{
-				cars = new Cars("left"); //Passing current scene to Cars class
+				carDirection = "left";
+				cars = new Cars(carDirection); //Passing current scene to Cars class
 				cars.x = 1020;
-				cars.y = 400;
+				cars.y = 404;
+				cars.name = "enemy_car_" + objects.length;
+				addChild(cars);
+				objects.push(cars);
+				
+				carDirection = "right";
+				cars = new Cars(carDirection);
+				cars.x = -40;
+				cars.y = 460;
 				cars.name = "enemy_car_" + objects.length;
 				addChild(cars);
 				objects.push(cars);
 			}
 		}
-		/*
+		
 		public function sceneChange(event:Event)
 		{
-			if (leaveSuburb.hitTestObject(player))
+			if (leaveMall.hitTestObject(player))
 			{
 				carsTimer.stop();
 				carsTimer.removeEventListener(TimerEvent.TIMER, carsTimerTick);
-				leaveSuburb.removeEventListener(Event.ENTER_FRAME, sceneChange);
+				leaveMall.removeEventListener(Event.ENTER_FRAME, sceneChange);
 				removeEventListener(Event.ENTER_FRAME, mainLoop);
 				player.removeEventListeners();
 				for (var i = 0; i < objects.length; i++)
@@ -127,6 +158,6 @@ package
 				gameState.suburbScene2();
 				trace("Switch to Suburb 2");
 			}
-		}*/
+		}
 	}
 }

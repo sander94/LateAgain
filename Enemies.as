@@ -66,7 +66,7 @@ package
 				break;
 
 				case "nazi":
-				speed = 2;
+				speed = 1;
 				addEventListener(Event.ENTER_FRAME, patrol,false,0,true);
 				patrolTimer = new Timer(2000);
 				patrolTimer.start();

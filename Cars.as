@@ -5,8 +5,11 @@ package
 	
 	public class Cars extends MovieClip
 	{
-		public function Cars(driveDirection)
+		private var driveDirection:String;
+		
+		public function Cars(carDirection)
 		{
+			driveDirection = carDirection;
 			var typeRandomNumber:Number = Math.ceil(Math.random() * 10);
 			//trace("randomNumber: " +typeRandomNumber)
 			
@@ -26,14 +29,24 @@ package
 		
 		private function carMove(e:Event)
 		{
-			if (x < -40)
+			if (x < -40 && driveDirection == "left")
 			{
 				removeEventListener(Event.ENTER_FRAME, carMove);
 				this.parent.removeChild(this);
 			}
-			else
+			else if (driveDirection == "left")
 			{
 				x -= 8 * Player.speedMult;
+			}
+			
+			if (x > 1100 && driveDirection == "right")
+			{
+				removeEventListener(Event.ENTER_FRAME, carMove);
+				this.parent.removeChild(this);
+			}
+			else if (driveDirection == "right")
+			{
+				x += 8 * Player.speedMult;
 			}
 		}
 

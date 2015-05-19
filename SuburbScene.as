@@ -18,6 +18,7 @@ package
 		private var cars:Cars;
 		private var enemies:Enemies;
 		private var carsTimer:Timer = new Timer(2000);		// 1000ms == 1second
+		private var carDirection:String = "left";
 		
 		public static var objects:Array;
 		
@@ -73,6 +74,12 @@ package
 			addChild(enemies);
 			objects.push(enemies);
 
+			enemies = new Enemies("granny", "up", 560, 180); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 567;//This is a testing location, change as you will
+			enemies.y = 180;
+			enemies.name = "enemy_granny_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
 			//Add more enemies here
 		}
 
@@ -102,9 +109,18 @@ package
 		{
 			if (Player.playerAlive || !Player.playerHit)
 			{
-				cars = new Cars("left"); //Passing current scene to Cars class
+				carDirection = "left";
+				cars = new Cars(carDirection);	//passing direction to Cars Class
 				cars.x = 1060;
-				cars.y = 420;
+				cars.y = 422;
+				cars.name = "enemy_car_" + objects.length;
+				addChild(cars);
+				objects.push(cars);
+				
+				carDirection = "right";
+				cars = new Cars(carDirection);
+				cars.x = -40;
+				cars.y = 480;
 				cars.name = "enemy_car_" + objects.length;
 				addChild(cars);
 				objects.push(cars);

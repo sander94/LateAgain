@@ -15,8 +15,9 @@ package
 		
 		private var slumForeground:SlumForeground;
 		private var cars:Cars;
-		private var carsTimer:Timer = new Timer(3000);		// 1000ms == 1second
+		private var carsTimer:Timer = new Timer(3600);		// 1000ms == 1second
 		private var enemies:Enemies;
+		private var carDirection:String = "left";
 		
 		public static var objects:Array;
 		
@@ -39,8 +40,8 @@ package
 			
 			addEnemies();
 			
-			/*carsTimer.start();
-			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);*/
+			carsTimer.start();
+			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);
 			addEventListener(Event.ENTER_FRAME, mainLoop,false,0,true);
 
 			leaveSlum.addEventListener(Event.ENTER_FRAME, sceneChange,false,0,true);
@@ -61,16 +62,23 @@ package
 		
 		private function addEnemies()
 		{
-			enemies = new Enemies("nazi", "right", 0, 0); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies = new Enemies("nazi", "right", 580, 230); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
 			enemies.x = 580;//This is a testing location, change as you will
 			enemies.y = 230;
 			enemies.name = "enemy_nazi_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
 			
-			enemies = new Enemies("nazi", "left", 0, 0); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies = new Enemies("nazi", "left", 480, 190); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
 			enemies.x = 480;//This is a testing location, change as you will
 			enemies.y = 190;
+			enemies.name = "enemy_nazi_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
+			enemies = new Enemies("nazi", "down", 510, 200); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 510;//This is a testing location, change as you will
+			enemies.y = 130;
 			enemies.name = "enemy_nazi_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
@@ -79,14 +87,14 @@ package
 
 		private function mainLoop(e:Event)
 		{
-			/*if (objects == null)
+			if (objects == null)
 			{
 				carsTimer.stop();
 				carsTimer.removeEventListener(TimerEvent.TIMER, carsTimerTick);
 				leaveSlum.removeEventListener(Event.ENTER_FRAME, sceneChange);
 				removeEventListener(Event.ENTER_FRAME, mainLoop);
 			}
-			else if (!player.playerAlive)
+			else if (!Player.playerAlive)
 			{
 				for (var i = 0; i < objects.length; i++)
 				{
@@ -95,38 +103,47 @@ package
 						objects[i].removeEventListeners();
 					}
 				}
-			}*/
+			}
 		}
 		
-		/*private function carsTimerTick(timerEvent:TimerEvent):void
+		private function carsTimerTick(timerEvent:TimerEvent):void
 		{
-			if (player.playerAlive)
+			if (Player.playerAlive)
 			{
-				cars = new Cars(SuburbScene); //Passing current scene to Cars class
+				carDirection = "left";
+				cars = new Cars(carDirection); //Passing current scene to Cars class
 				cars.x = 1060;
-				cars.y = 420;
+				cars.y = 414;
+				cars.name = "enemy_car_" + objects.length;
+				addChild(cars);
+				objects.push(cars);
+				
+				carDirection = "right";
+				cars = new Cars(carDirection); //Passing current scene to Cars class
+				cars.x = -60;
+				cars.y = 470;
 				cars.name = "enemy_car_" + objects.length;
 				addChild(cars);
 				objects.push(cars);
 			}
-		}*/
+		}
 
 		public function sceneChange(event:Event)
 		{
 			if (leaveSlum.hitTestObject(player))
 			{
-				/*carsTimer.stop();
+				carsTimer.stop();
 				carsTimer.removeEventListener(TimerEvent.TIMER, carsTimerTick);
-				removeEventListener(Event.ENTER_FRAME, mainLoop);*/
+				removeEventListener(Event.ENTER_FRAME, mainLoop);
 				leaveSlum.removeEventListener(Event.ENTER_FRAME, sceneChange);
 				player.removeEventListeners();
-				/*for (var i = 0; i < objects.length; i++)
+				for (var i = 0; i < objects.length; i++)
 				{
 					if (objects[i].name.indexOf("enemy") >= 0)
 					{
 						objects[i].removeEventListeners();
 					}
-				}*/
+				}
 				objects = null;
 				gameState.cityScene();
 				trace("Moving to City");
