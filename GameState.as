@@ -40,7 +40,7 @@ package
 		
 		public function GameState()
 		{
-			startScene();
+			//startScene();
 			//homeScene();
 			//suburbScene();
 			//suburbScene2();
@@ -48,7 +48,7 @@ package
 			//cityScene();
 			//mallScene();
 			//schoolScene();
-			//endScene();
+			endScene();
 		}
 
 		private function gameTimerTick(e:TimerEvent)

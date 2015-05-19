@@ -185,22 +185,46 @@ package
 		{
 			if (inRange)//If player in range, chase
 			{
-				if (Player.playerX > x + 3 && !rightCollision)
+				if (Player.playerX > x + 3 && !rightCollision && Player.playerY < y)
+				{
+					this.gotoAndStop(enemyType + "_move_right");
+					x += speed * Player.speedMult;
+					y -= speed * Player.speedMult;
+				}
+				else if (Player.playerX < x - 3 && !leftCollision && Player.playerY > y)
+				{
+					this.gotoAndStop(enemyType + "_move_left");
+					x -= speed * Player.speedMult;
+					y += speed * Player.speedMult;
+				}
+				else if (Player.playerY > y + 3 && !downCollision && Player.playerX > x)
+				{
+					this.gotoAndStop(enemyType + "_move_down");
+					y += speed * Player.speedMult;
+					x += speed * Player.speedMult;
+				}
+				else if (Player.playerY < y - 3 && !upCollision && Player.playerX < x)
+				{
+					this.gotoAndStop(enemyType + "_move_up");
+					y -= speed * Player.speedMult;
+					x -= speed * Player.speedMult;
+				}
+				else if (Player.playerX > x + 3 && !rightCollision)
 				{
 					this.gotoAndStop(enemyType + "_move_right");
 					x += speed * Player.speedMult;
 				}
-				if (Player.playerX < x - 3 && !leftCollision)
+				else if (Player.playerX < x - 3 && !leftCollision)
 				{
 					this.gotoAndStop(enemyType + "_move_left");
 					x -= speed * Player.speedMult;
 				}
-				if (Player.playerY > y + 3 && !downCollision)
+				else if (Player.playerY > y + 3 && !downCollision)
 				{
 					this.gotoAndStop(enemyType + "_move_down");
 					y += speed * Player.speedMult;
 				}
-				if (Player.playerY < y - 3 && !upCollision)
+				else if (Player.playerY < y - 3 && !upCollision)
 				{
 					this.gotoAndStop(enemyType + "_move_up");
 					y -= speed * Player.speedMult;
@@ -208,22 +232,46 @@ package
 			}
 			else//Else return to spawn point and resume patrolling
 			{
-				if (x > startX && !leftCollision)
+				if (x > startX && !leftCollision && y > startY)
+				{
+					this.gotoAndStop(enemyType + "_move_left");
+					x -= speed * Player.speedMult;
+					y -= speed * Player.speedMult;
+				}
+				else if (x < startX && !rightCollision && y < startY)
+				{
+					this.gotoAndStop(enemyType + "_move_right");
+					x += speed * Player.speedMult;
+					y += speed * Player.speedMult;
+				}
+				else if (y > startY && !upCollision && x < startX)
+				{
+					this.gotoAndStop(enemyType + "_move_up");
+					y -= speed * Player.speedMult;
+					x += speed * Player.speedMult;
+				}
+				else if (y < startY && !downCollision && x > startX)
+				{
+					this.gotoAndStop(enemyType + "_move_down");
+					y += speed * Player.speedMult;
+					x -= speed * Player.speedMult;
+				}
+				else if (x > startX && !leftCollision)
 				{
 					this.gotoAndStop(enemyType + "_move_left");
 					x -= speed * Player.speedMult;
 				}
-				if (x < startX && !rightCollision)
+				else if (x < startX && !rightCollision)
 				{
 					this.gotoAndStop(enemyType + "_move_right");
 					x += speed * Player.speedMult;
 				}
-				if (y > startY && !upCollision)
+				else if (y > startY && !upCollision)
 				{
 					this.gotoAndStop(enemyType + "_move_up");
 					y -= speed * Player.speedMult;
 				}
-				if (y < startY && !downCollision)
+				else if (y < startY && !downCollision)
 				{
 					this.gotoAndStop(enemyType + "_move_down");
 					y += speed * Player.speedMult;
