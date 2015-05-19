@@ -155,8 +155,8 @@ package
 					}
 				}
 				objects = null;
-				gameState.suburbScene2();
-				trace("Switch to Suburb 2");
+				gameState.schoolScene();
+				trace("Switch to School");
 			}
 		}
 	}

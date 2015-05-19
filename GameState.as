@@ -18,6 +18,7 @@ package
 		private var _slumScene:SlumScene;
 		private var _cityScene:CityScene;
 		private var _mallScene:MallScene;
+		private var _schoolScene:SchoolScene;
 
 		public var heldPowerUp:Boolean = false;				//moved powerup stuff here so that they are stored from scene to scene
 		public var curPowerUp:MovieClip = new MovieClip;
@@ -39,13 +40,14 @@ package
 		
 		public function GameState()
 		{
-			//startScene();
+			startScene();
 			//homeScene();
 			//suburbScene();
 			//suburbScene2();
 			//slumScene();
 			//cityScene();
-			mallScene();
+			//mallScene();
+			//schoolScene();
 			//endScene();
 		}
 
@@ -121,6 +123,14 @@ package
 			
 			Player.userInterface.timeRemaining.text = String(Math.ceil(gameTimeRemaining));
 		}
+		public function schoolScene()
+		{
+			removeScene();
+			_schoolScene = new SchoolScene(this, stage);
+			addChild(_schoolScene);
+			
+			Player.userInterface.timeRemaining.text = String(Math.ceil(gameTimeRemaining));
+		}
 		
 		public function endScene()
 		{
@@ -161,6 +171,16 @@ package
 			{
 				removeChild(_cityScene);
 				_cityScene = null;
+			}
+			if (_mallScene)
+			{
+				removeChild(_mallScene);
+				_mallScene = null;
+			}
+			if (_schoolScene)
+			{
+				removeChild(_schoolScene);
+				_schoolScene = null;
 			}
 		}
 	}
