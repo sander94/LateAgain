@@ -42,10 +42,10 @@ package
 		
 		public function GameState()
 		{
-			//startScene();
+			startScene();
 			//homeScene();
 			//suburbScene();
-			suburbScene2();
+			//suburbScene2();
 			//slumScene();
 			//cityScene();
 			//mallScene();

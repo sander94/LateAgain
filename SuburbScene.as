@@ -74,9 +74,9 @@ package
 			addChild(enemies);
 			objects.push(enemies);
 
-			enemies = new Enemies("kid", "up", 560, 350); 		//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 560;									//This is a testing location, change as you will
-			enemies.y = 350;
+			enemies = new Enemies("kid", "up", 565, 362); 		//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 565;									//This is a testing location, change as you will
+			enemies.y = 362;
 			enemies.name = "enemy_kid_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
