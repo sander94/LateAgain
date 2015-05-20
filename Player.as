@@ -692,6 +692,37 @@ package
 				if (this.currentLabel != animationState){
 					this.gotoAndStop(animationState);
 				}
+
+				//if time runs to 0 game over
+				if (gameState.gameTimeRemaining <= 0)
+				{
+					switch (lastDirection)
+					{
+						case "left_stop":
+						this.gotoAndStop("left_hit");
+						break;
+
+						case "right_stop":
+						this.gotoAndStop("right_hit");
+						break;
+
+						case "up_stop":
+						this.gotoAndStop("up_hit");
+						break;
+
+						case "down_stop":
+						this.gotoAndStop("down_hit");
+						break;
+					}
+					addEventListener(Event.ENTER_FRAME, playerDown);
+					removeEventListeners();
+
+					restartText = new RestartText;
+					restartTextXY();
+					parent.addChild(restartText);
+					
+					playerAlive = false;
+				}
 			}
 		}
 	}

@@ -30,7 +30,7 @@ package
 		public var currentStamina:int = maxStamina;
 		public var cooldown:Boolean = false;
 		
-		public var gameTimeRemaining:Number = 300;
+		public var gameTimeRemaining:Number;
 		private var gameTimer:Timer = new Timer(1000);		// 1000ms == 1second
 		
 		public var introMusic:Sound = new MusicIntro;							// reference to imported music in Flash library
@@ -42,7 +42,7 @@ package
 		
 		public function GameState()
 		{
-			//startScene();
+			startScene();
 			//homeScene();
 			//suburbScene();
 			//suburbScene2();
@@ -50,7 +50,7 @@ package
 			//cityScene();
 			//mallScene();
 			//schoolScene();
-			endScene();
+			//endScene();
 		}
 
 		private function gameTimerTick(e:TimerEvent)
@@ -66,7 +66,7 @@ package
 		{
 			gameTimer.stop();
 			gameTimer = new Timer(1000);
-			gameTimeRemaining = 300;
+			gameTimeRemaining = 180; //set time remaining here
 			gameTimer.removeEventListener(TimerEvent.TIMER, gameTimerTick)
 			removeScene();
 			_startScene = new StartScene(this, stage);
