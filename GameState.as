@@ -38,17 +38,19 @@ package
 		public var volume:SoundTransform = new SoundTransform(0.1, 0);			// volume control and panning
 		public var musicChannel:SoundChannel = new SoundChannel;				// needed to control sound beyond the basic .play() command
 		
+		public var shortCut:Boolean = false;				// variable for triggering the shortcut spawn location when transfering from Mall to School
+		
 		public function GameState()
 		{
 			//startScene();
 			//homeScene();
 			//suburbScene();
-			//suburbScene2();
+			suburbScene2();
 			//slumScene();
 			//cityScene();
 			//mallScene();
 			//schoolScene();
-			endScene();
+			//endScene();
 		}
 
 		private function gameTimerTick(e:TimerEvent)

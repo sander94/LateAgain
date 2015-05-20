@@ -15,7 +15,7 @@ package
 		
 		private var slumForeground:SlumForeground;
 		private var cars:Cars;
-		private var carsTimer:Timer = new Timer(3600);		// 1000ms == 1second
+		private var carsTimer:Timer = new Timer(2400);		// 1000ms == 1second
 		private var enemies:Enemies;
 		private var carDirection:String = "left";
 		
@@ -33,12 +33,12 @@ package
 			player.y = 184;
 			addChild(player);
 			
+			addEnemies();
+			
 			slumForeground = new SlumForeground;
 			slumForeground.x = 489;
 			slumForeground.y = 232;
 			addChild(slumForeground);
-			
-			addEnemies();
 			
 			carsTimer.start();
 			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);
@@ -113,7 +113,7 @@ package
 				carDirection = "left";
 				cars = new Cars(carDirection); //Passing current scene to Cars class
 				cars.x = 1060;
-				cars.y = 414;
+				cars.y = 412;
 				cars.name = "enemy_car_" + objects.length;
 				addChild(cars);
 				objects.push(cars);

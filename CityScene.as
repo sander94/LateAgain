@@ -33,12 +33,12 @@ package
 			player.y = 346;
 			addChild(player);
 			
+			addEnemies();
+			
 			cityForeground = new CityForeground;
 			cityForeground.x = 476;
 			cityForeground.y = 256;
 			addChild(cityForeground);
-			
-			addEnemies();
 			
 			carsTimer.start();
 			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);

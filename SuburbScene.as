@@ -37,14 +37,14 @@ package
 			gameState.volume.volume = 0.4;
 			gameState.musicChannel.stop()
 			gameState.musicChannel = gameState.stageMusic.play(0, 10, gameState.volume);
+			
+			addEnemies();
 
 			suburbForeground = new SuburbForeground;
 			suburbForeground.x = 480;
 			suburbForeground.y = 268;
 			addChild(suburbForeground);
 
-			addEnemies();
-			
 			carsTimer.start();
 			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);
 			addEventListener(Event.ENTER_FRAME, mainLoop,false,0,true);
@@ -67,19 +67,20 @@ package
 
 		private function addEnemies()
 		{
-			enemies = new Enemies("granny", "down", 380, 220); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 326;//This is a testing location, change as you will
+			enemies = new Enemies("granny", "down", 380, 220); 	//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 326;									//This is a testing location, change as you will
 			enemies.y = 250;
 			enemies.name = "enemy_granny_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
 
-			enemies = new Enemies("granny", "up", 560, 180); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 567;//This is a testing location, change as you will
-			enemies.y = 180;
-			enemies.name = "enemy_granny_" + objects.length;
+			enemies = new Enemies("kid", "up", 560, 350); 		//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 560;									//This is a testing location, change as you will
+			enemies.y = 350;
+			enemies.name = "enemy_kid_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
+			
 			//Add more enemies here
 		}
 

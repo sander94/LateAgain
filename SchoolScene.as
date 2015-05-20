@@ -1,6 +1,7 @@
 package
 {
 	import KeyObject;
+	
 	import flash.display.*;
 	import flash.events.*;
 	import flash.text.TextField;
@@ -28,17 +29,26 @@ package
 			objects = new Array();
 			addObjects();
 			
-			player = new Player(gameState, stageRef, SchoolScene, this, 40, 325);
-			player.x = 40;
-			player.y = 325;
+			if (gameState.shortCut == true)
+			{
+				player = new Player(gameState, stageRef, SchoolScene, this, 30, 90);
+				player.x = 30;
+				player.y = 90;
+			}
+			else
+			{
+				player = new Player(gameState, stageRef, SchoolScene, this, 40, 325);
+				player.x = 40;
+				player.y = 325;
+			}
 			addChild(player);
+			
+			addEnemies();
 			
 			schoolForeground = new SchoolForeground;
 			schoolForeground.x = 490;
 			schoolForeground.y = 220;
 			addChild(schoolForeground);
-			
-			addEnemies();
 			
 			carsTimer.start();
 			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);
@@ -62,9 +72,9 @@ package
 		
 		private function addEnemies()
 		{
-			enemies = new Enemies("granny", "up", 900, 250); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 900;								//This is a testing location, change as you will
-			enemies.y = 250;
+			enemies = new Enemies("granny", "up", 800, 280); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 790;								//This is a testing location, change as you will
+			enemies.y = 280;
 			enemies.name = "enemy_granny_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
@@ -78,7 +88,7 @@ package
 			{
 				carsTimer.stop();
 				carsTimer.removeEventListener(TimerEvent.TIMER, carsTimerTick);
-				//leaveSchool.removeEventListener(Event.ENTER_FRAME, sceneChange);
+				leaveSchool.removeEventListener(Event.ENTER_FRAME, sceneChange);
 				removeEventListener(Event.ENTER_FRAME, mainLoop);
 			}
 			else if (!Player.playerAlive)

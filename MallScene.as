@@ -34,18 +34,19 @@ package
 			player.y = 350;
 			addChild(player);
 			
+			addEnemies();
+			
 			mallForeground = new MallForeground;
 			mallForeground.x = 480;
 			mallForeground.y = 290;
 			addChild(mallForeground);
-			
-			addEnemies();
 			
 			carsTimer.start();
 			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);
 			addEventListener(Event.ENTER_FRAME, mainLoop,false,0,true);
 			
 			leaveMall.addEventListener(Event.ENTER_FRAME, sceneChange,false,0,true);
+			leaveMallSC.addEventListener(Event.ENTER_FRAME, sceneChange2,false,0,true);
 		}
 		
 		//Add collidable objects to objects array
@@ -101,7 +102,8 @@ package
 			{  
 				carsTimer.stop();
 				carsTimer.removeEventListener(TimerEvent.TIMER, carsTimerTick);
-				//leaveMall.removeEventListener(Event.ENTER_FRAME, sceneChange);
+				leaveMall.removeEventListener(Event.ENTER_FRAME, sceneChange);
+				leaveMallSC.removeEventListener(Event.ENTER_FRAME, sceneChange2);
 				removeEventListener(Event.ENTER_FRAME, mainLoop);
 			}
 			else if (!Player.playerAlive)
@@ -121,7 +123,7 @@ package
 			if (Player.playerAlive || !Player.playerHit)
 			{
 				carDirection = "left";
-				cars = new Cars(carDirection); //Passing current scene to Cars class
+				cars = new Cars(carDirection); //Passing direction to Cars class
 				cars.x = 1020;
 				cars.y = 404;
 				cars.name = "enemy_car_" + objects.length;
@@ -142,8 +144,33 @@ package
 		{
 			if (leaveMall.hitTestObject(player))
 			{
+				gameState.shortCut = false;
 				carsTimer.stop();
 				carsTimer.removeEventListener(TimerEvent.TIMER, carsTimerTick);
+				leaveMall.removeEventListener(Event.ENTER_FRAME, sceneChange);
+				leaveMallSC.removeEventListener(Event.ENTER_FRAME, sceneChange2);
+				removeEventListener(Event.ENTER_FRAME, mainLoop);
+				player.removeEventListeners();
+				for (var i = 0; i < objects.length; i++)
+				{
+					if (objects[i].name.indexOf("enemy") >= 0)
+					{
+						objects[i].removeEventListeners();
+					}
+				}
+				objects = null;
+				gameState.schoolScene();
+				trace("Switch to School");
+			}
+		}
+		public function sceneChange2(event:Event)
+		{
+			if (leaveMallSC.hitTestObject(player))
+			{
+				gameState.shortCut = true;
+				carsTimer.stop();
+				carsTimer.removeEventListener(TimerEvent.TIMER, carsTimerTick);
+				leaveMallSC.removeEventListener(Event.ENTER_FRAME, sceneChange2);
 				leaveMall.removeEventListener(Event.ENTER_FRAME, sceneChange);
 				removeEventListener(Event.ENTER_FRAME, mainLoop);
 				player.removeEventListeners();
@@ -160,4 +187,5 @@ package
 			}
 		}
 	}
+	
 }

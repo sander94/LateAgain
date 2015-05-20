@@ -33,12 +33,12 @@ package
 			player.y = 142;
 			addChild(player);
 			
+			addEnemies();
+			
 			suburbForeground = new SuburbForeground2;
 			suburbForeground.x = 532.5;
 			suburbForeground.y = 337;
 			addChild(suburbForeground);
-			
-			addEnemies();
 			
 			carsTimer.start();
 			carsTimer.addEventListener(TimerEvent.TIMER, carsTimerTick,false,0,true);
@@ -62,10 +62,31 @@ package
 		
 		private function addEnemies()
 		{
-			enemies = new Enemies("granny", "up", 420, 250); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 422;								//This is a testing location, change as you will
-			enemies.y = 290;
+			enemies = new Enemies("granny", "up", 422, 336); 	//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 422;									//This is a testing location, change as you will
+			enemies.y = 336;
 			enemies.name = "enemy_granny_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
+			enemies = new Enemies("granny", "down", 172, 156); 	//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 172;									//This is a testing location, change as you will
+			enemies.y = 156;
+			enemies.name = "enemy_granny_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
+			enemies = new Enemies("kid", "right", 425, 485); 		//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 425;									//This is a testing location, change as you will
+			enemies.y = 485;
+			enemies.name = "enemy_kid_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
+			enemies = new Enemies("kid", "left", 720, 138); 		//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 720;									//This is a testing location, change as you will
+			enemies.y = 138;
+			enemies.name = "enemy_kid_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
 			
