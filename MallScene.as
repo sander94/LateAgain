@@ -17,7 +17,7 @@ package
 		private var mallForeground:MallForeground;
 		private var cars:Cars;
 		private var enemies:Enemies;
-		private var carsTimer:Timer = new Timer(1500);		// 1000ms == 1second
+		private var carsTimer:Timer = new Timer(1300);		// 1000ms == 1second
 		private var carDirection:String = "left";
 		
 		public static var objects:Array;
@@ -64,9 +64,9 @@ package
 		
 		private function addEnemies()
 		{
-			enemies = new Enemies("granny", "down", 380, 220); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 326;//This is a testing location, change as you will
-			enemies.y = 180;
+			enemies = new Enemies("granny", "down", 324, 200); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 324;//This is a testing location, change as you will
+			enemies.y = 200;
 			enemies.name = "enemy_granny_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
@@ -78,16 +78,23 @@ package
 			addChild(enemies);
 			objects.push(enemies);
 			
-			enemies = new Enemies("suit", "right", 624, 132); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 624;//This is a testing location, change as you will
-			enemies.y = 132;
-			enemies.name = "enemy_suit_" + objects.length;
+			enemies = new Enemies("hippie", "down", 728, 20); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 728;//This is a testing location, change as you will
+			enemies.y = 20;
+			enemies.name = "enemy_hippie_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
 			
-			enemies = new Enemies("suit", "left", 710, 154); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 710;//This is a testing location, change as you will
-			enemies.y = 154;
+			enemies = new Enemies("kid", "left", 360, 492); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 360;//This is a testing location, change as you will
+			enemies.y = 492;
+			enemies.name = "enemy_kid_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
+			enemies = new Enemies("suit", "right", 628, 160); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 628;//This is a testing location, change as you will
+			enemies.y = 160;
 			enemies.name = "enemy_suit_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
@@ -125,7 +132,7 @@ package
 				carDirection = "left";
 				cars = new Cars(carDirection); //Passing direction to Cars class
 				cars.x = 1020;
-				cars.y = 404;
+				cars.y = 402;
 				cars.name = "enemy_car_" + objects.length;
 				addChild(cars);
 				objects.push(cars);
@@ -133,7 +140,7 @@ package
 				carDirection = "right";
 				cars = new Cars(carDirection);
 				cars.x = -40;
-				cars.y = 460;
+				cars.y = 452;
 				cars.name = "enemy_car_" + objects.length;
 				addChild(cars);
 				objects.push(cars);

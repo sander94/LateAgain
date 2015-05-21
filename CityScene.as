@@ -62,30 +62,23 @@ package
 		
 		private function addEnemies()
 		{
-			enemies = new Enemies("suit", "left", 500, 340); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 500;//This is a testing location, change as you will
+			enemies = new Enemies("suit", "left", 380, 340); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 380;		//This is a testing location, change as you will
 			enemies.y = 340;
 			enemies.name = "enemy_suit_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
 			
-			enemies = new Enemies("suit", "right", 300, 238); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 300;//This is a testing location, change as you will
-			enemies.y = 238;
+			enemies = new Enemies("suit", "right", 490, 190); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 490;		//This is a testing location, change as you will
+			enemies.y = 190;
 			enemies.name = "enemy_suit_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
 			
-			enemies = new Enemies("suit", "up", 716, 250); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 716;//This is a testing location, change as you will
-			enemies.y = 250;
-			enemies.name = "enemy_suit_" + objects.length;
-			addChild(enemies);
-			objects.push(enemies);
-			
-			enemies = new Enemies("granny", "down", 532, 306); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 536;//This is a testing location, change as you will
-			enemies.y = 312;
+			enemies = new Enemies("granny", "down", 532, 272); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 532;									//This is a testing location, change as you will
+			enemies.y = 272;
 			enemies.name = "enemy_granny_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);

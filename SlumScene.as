@@ -15,7 +15,7 @@ package
 		
 		private var slumForeground:SlumForeground;
 		private var cars:Cars;
-		private var carsTimer:Timer = new Timer(2400);		// 1000ms == 1second
+		private var carsTimer:Timer = new Timer(2000);		// 1000ms == 1second
 		private var enemies:Enemies;
 		private var carDirection:String = "left";
 		
@@ -62,6 +62,13 @@ package
 		
 		private function addEnemies()
 		{
+			enemies = new Enemies("hippie", "up", 168, 362); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 168;//This is a testing location, change as you will
+			enemies.y = 362;
+			enemies.name = "enemy_hippie_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
 			enemies = new Enemies("nazi", "right", 580, 230); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
 			enemies.x = 580;//This is a testing location, change as you will
 			enemies.y = 230;

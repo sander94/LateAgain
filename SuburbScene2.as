@@ -62,17 +62,24 @@ package
 		
 		private function addEnemies()
 		{
-			enemies = new Enemies("granny", "up", 422, 336); 	//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 422;									//This is a testing location, change as you will
-			enemies.y = 336;
+			enemies = new Enemies("granny", "up", 424, 200); 	//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 424;									//This is a testing location, change as you will
+			enemies.y = 200;
 			enemies.name = "enemy_granny_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
 			
-			enemies = new Enemies("granny", "down", 172, 156); 	//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 172;									//This is a testing location, change as you will
-			enemies.y = 156;
+			enemies = new Enemies("granny", "down", 174, 480); 	//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 174;									//This is a testing location, change as you will
+			enemies.y = 480;
 			enemies.name = "enemy_granny_" + objects.length;
+			addChild(enemies);
+			objects.push(enemies);
+			
+			enemies = new Enemies("hippie", "down", 172, 150); 	//Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 172;									//This is a testing location, change as you will
+			enemies.y = 150;
+			enemies.name = "enemy_hippie_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);
 			

@@ -16,7 +16,7 @@ package
 		
 		private var schoolForeground:SchoolForeground;
 		private var cars:Cars;
-		private var carsTimer:Timer = new Timer(2000);		// 1000ms == 1second
+		private var carsTimer:Timer = new Timer(1800);		// 1000ms == 1second
 		private var enemies:Enemies;
 		private var carDirection:String = "left";
 		
@@ -72,9 +72,9 @@ package
 		
 		private function addEnemies()
 		{
-			enemies = new Enemies("granny", "up", 800, 280); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
-			enemies.x = 790;								//This is a testing location, change as you will
-			enemies.y = 280;
+			enemies = new Enemies("granny", "up", 789, 278); //Passing enemy type, direction to patrol in and spawn X and Y coordinates to the Enemies class
+			enemies.x = 789;								//This is a testing location, change as you will
+			enemies.y = 278;
 			enemies.name = "enemy_granny_" + objects.length;
 			addChild(enemies);
 			objects.push(enemies);

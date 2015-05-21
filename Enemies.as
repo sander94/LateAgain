@@ -58,9 +58,9 @@ package
 			switch (enemyType) //Initial switch statement, all enemies default to patrol, but may have different patrol times and walk speeds
 			{
 				case "granny":
-				speed = 1.5;
+				speed = 1;
 				addEventListener(Event.ENTER_FRAME, patrol,false,0,true);
-				patrolTimer = new Timer(2000);
+				patrolTimer = new Timer(2400);
 				patrolTimer.start();
 				patrolTimer.addEventListener(TimerEvent.TIMER, patrolTimerTick,false,0,true);
 				break;
@@ -68,13 +68,13 @@ package
 				case "hippie":
 				speed = 3;
 				addEventListener(Event.ENTER_FRAME, patrol,false,0,true);
-				patrolTimer = new Timer(2600);
+				patrolTimer = new Timer(2000);
 				patrolTimer.start();
 				patrolTimer.addEventListener(TimerEvent.TIMER, patrolTimerTick,false,0,true);
 				break;
 				
 				case "kid":
-				speed = 1.5;
+				speed = 2;
 				addEventListener(Event.ENTER_FRAME, patrol,false,0,true);
 				patrolTimer = new Timer(3000);
 				patrolTimer.start();
