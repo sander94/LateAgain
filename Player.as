@@ -406,6 +406,12 @@ package
 					restartTextXY();
 					parent.addChild(restartText);
 					
+					gameState.curPowerUp = new MovieClip;
+					gameState.heldPowerUp = false;
+					gameState.powerUpTime = 1000;
+					gameState.powerUpActive = false;
+					gameState.currentStamina = gameState.maxStamina;
+					gameState.cooldown = false;
 					playerAlive = false;
 				}
 				//Othervise reset player and give time penalty
@@ -461,52 +467,60 @@ package
 		//X and Y coordinates for restart text
 		private function restartTextXY()
 		{
-			switch (getXY())
+			if (parentClassHeight > 363 && parentClassWidth > 483)
 			{
-				case "middle":
-				restartText.x = x;
-				restartText.y = y;
-				break;
+				switch (getXY())
+				{
+					case "middle":
+					restartText.x = x;
+					restartText.y = y;
+					break;
 
-				case "top left":
-				restartText.x = leftX + 240;
-				restartText.y = topY + 180;
-				break;
+					case "top left":
+					restartText.x = leftX + 240;
+					restartText.y = topY + 180;
+					break;
 
-				case "bottom left":
-				restartText.x = leftX + 240;
-				restartText.y = bottomY - 180;
-				break;
-				
-				case "top right":
-				restartText.x = rightX - 240;
-				restartText.y = topY + 180;
-				break;
-				
-				case "bottom right":
-				restartText.x = rightX - 240;
-				restartText.y = bottomY - 180;
-				break;
+					case "bottom left":
+					restartText.x = leftX + 240;
+					restartText.y = bottomY - 180;
+					break;
+					
+					case "top right":
+					restartText.x = rightX - 240;
+					restartText.y = topY + 180;
+					break;
+					
+					case "bottom right":
+					restartText.x = rightX - 240;
+					restartText.y = bottomY - 180;
+					break;
 
-				case "left":
-				restartText.x = leftX + 240;
-				restartText.y = y;
-				break;
-				
-				case "right":
-				restartText.x = rightX - 240;
-				restartText.y = y;
-				break;
-				
-				case "top":
-				restartText.x = x;
-				restartText.y = topY + 180;
-				break;
-				
-				case "bottom":
-				restartText.x = x;
-				restartText.y = bottomY - 180;
-				break;
+					case "left":
+					restartText.x = leftX + 240;
+					restartText.y = y;
+					break;
+					
+					case "right":
+					restartText.x = rightX - 240;
+					restartText.y = y;
+					break;
+					
+					case "top":
+					restartText.x = x;
+					restartText.y = topY + 180;
+					break;
+					
+					case "bottom":
+					restartText.x = x;
+					restartText.y = bottomY - 180;
+					break;
+				}
+			}
+			else
+			{
+				restartText.x = 0;
+				restartText.y = 0;
 			}
 		}
 		
@@ -548,7 +562,10 @@ package
 					{
 						speed = 8;
 					}
-					speed = 4;
+					else
+					{
+						speed = 4;
+					}
 					speedMult = 0.5;
 				}
 				
@@ -619,7 +636,7 @@ package
 						gameState.currentStamina += 10 * speedMult;
 						//trace(gameState.currentStamina)
 					}
-					else if (gameState.currentStamina == gameState.maxStamina)
+					else if (gameState.currentStamina >= gameState.maxStamina)
 					{
 						staminaColor = new ColorTransform(0,0,0,1,0,255,0,0);
 						staminaBar.transform.colorTransform = staminaColor;
@@ -732,14 +749,13 @@ package
 					gameState.volume.volume = 0.1;
 					gameState.musicChannel = gameState.deathMusic.play(0, 0, gameState.volume)
 					
+					playerAlive = false;
 					addEventListener(Event.ENTER_FRAME, playerDown);
 					removeEventListeners();
 
 					restartText = new RestartText;
 					restartTextXY();
 					parent.addChild(restartText);
-					
-					playerAlive = false;
 				}
 			}
 		}

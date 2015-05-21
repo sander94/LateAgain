@@ -64,8 +64,8 @@ package
 					break;
 
 					case 2:
-					scoresArray[Number(scoresInteger)] = line;
-					scoresInteger++
+					scoresArray[scoresInteger] = Math.ceil(Number(line));
+					scoresInteger++;
 					i = 1;
 					break;
 				}
@@ -81,7 +81,14 @@ package
 			{
 				namesArray.pop();
 			}
-
+			for (var s:int = 0; s < scoresArray.length; s++)
+			{
+				if (isNaN(scoresArray[s]))
+				{
+					scoresArray.splice(s, 1);
+					namesArray.splice(s, 1);
+				}
+			}
 			tempArray = scoresArray.slice(0, scoresArray.length); //clones scoresArray to tempArray
 			tempArray.sort(Array.DESCENDING | Array.NUMERIC) //sorts tempArray in decending order, this is used as a refence in the actual sorting progress
 
@@ -163,6 +170,19 @@ package
 				scoresArray.push(gameState.gameTimeRemaining);
 				removeEventListener(KeyboardEvent.KEY_UP, keyPressed);
 				organizeArrays();
+
+				inputField.text = "Press Space to retrun to menu";
+				inputField.selectable = false;
+				addEventListener(Event.ENTER_FRAME, sceneChange);
+			}
+		}
+
+		private function sceneChange(e:Event)
+		{
+			if (key.isDown(key.SPACE))
+			{
+				removeEventListener(Event.ENTER_FRAME, sceneChange);
+				gameState.startScene();
 			}
 		}
 	}

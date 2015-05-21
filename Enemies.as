@@ -111,7 +111,7 @@ package
 					{
 						//Stop movement in that direction
 						leftCollision = true;
-						trace("leftCollision")
+						//trace("leftCollision")
 						break;
 					}
 					else
@@ -122,7 +122,7 @@ package
 					if (Player.curScene.objects[i].hitTestObject(hitboxRight) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0) && !(Player.curScene.objects[i].name.indexOf("power") >= 0))
 					{
 						rightCollision = true;
-						trace("rightCollision")
+						//trace("rightCollision")
 						break;
 					}
 					else
@@ -141,7 +141,7 @@ package
 					if (Player.curScene.objects[i].hitTestObject(hitboxUp) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0) && !(Player.curScene.objects[i].name.indexOf("power") >= 0))
 					{
 						upCollision = true;
-						trace("upCollision")
+						//trace("upCollision")
 						break;
 					}
 					else
@@ -152,7 +152,7 @@ package
 					if (Player.curScene.objects[i].hitTestObject(hitboxDown) && !(Player.curScene.objects[i].name.indexOf("enemy") >= 0) && !(Player.curScene.objects[i].name.indexOf("power") >= 0))
 					{
 						downCollision = true;
-						trace("downCollision")
+						//trace("downCollision")
 						break;
 					}
 					else
