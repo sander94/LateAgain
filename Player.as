@@ -396,6 +396,10 @@ package
 				//If enemy was car, game over
 				if (enemy.name.indexOf("car") >= 0)
 				{
+					gameState.effectChannel.stop()
+					gameState.musicChannel.stop()
+					gameState.hitChannel = gameState.deathMusic.play(0, 0, gameState.effectVolume)
+					
 					removeEventListeners();
 
 					restartText = new RestartText;
@@ -407,6 +411,9 @@ package
 				//Othervise reset player and give time penalty
 				else
 				{
+					gameState.effectChannel.stop()
+					gameState.hitChannel = gameState.hitEffect.play(0, 0, gameState.effectVolume)
+					
 					removeEventListener(Event.ENTER_FRAME, playerLoop);
 					removeEventListener(Event.ENTER_FRAME, hitTestPointHor);
 					removeEventListener(Event.ENTER_FRAME, hitTestPointVer);
@@ -508,6 +515,9 @@ package
 		{
 			if (!gameState.powerUpActive)
 			{
+				gameState.effectVolume.volume = 0.1;
+				gameState.effectChannel = gameState.pickUpPowerUp.play(0, 0, gameState.effectVolume)
+				
 				if (gameState.heldPowerUp)
 				{
 					userInterface.powerUpFrame.removeChild(gameState.curPowerUp);
@@ -623,6 +633,9 @@ package
 				
 				if (key.isDown(key.E) && !gameState.powerUpActive && gameState.heldPowerUp)
 				{
+					gameState.effectVolume.volume = 0.1;
+					gameState.effectChannel = gameState.usePowerUpEffect.play(0, 0, gameState.effectVolume)
+						
 					gameState.powerUpActive = true;
 					addEventListener(Event.ENTER_FRAME, usedPowerUp);
 				}
@@ -714,6 +727,11 @@ package
 						this.gotoAndStop("down_hit");
 						break;
 					}
+					
+					gameState.musicChannel.stop()
+					gameState.volume.volume = 0.1;
+					gameState.musicChannel = gameState.deathMusic.play(0, 0, gameState.volume)
+					
 					addEventListener(Event.ENTER_FRAME, playerDown);
 					removeEventListeners();
 

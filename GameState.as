@@ -33,19 +33,26 @@ package
 		public var gameTimeRemaining:Number;
 		private var gameTimer:Timer = new Timer(1000);		// 1000ms == 1second
 		
-		public var introMusic:Sound = new MusicIntro;							// reference to imported music in Flash library
-		public var stageMusic:Sound = new MusicStage2;
-		public var volume:SoundTransform = new SoundTransform(0.1, 0);			// volume control and panning
+		public var introMusic:Sound = new MusicIntro2;							// reference to imported music in Flash library
+		public var stageMusic:Sound = new MusicStage3;
+		public var hitEffect:Sound = new HitEffect;
+		public var pickUpPowerUp:Sound = new ItemPickUp;
+		public var usePowerUpEffect:Sound = new PowerUpUse;
+		public var deathMusic:Sound = new MusicGameOver;
+		public var volume:SoundTransform = new SoundTransform(0.2, 0);			// volume control and panning
+		public var effectVolume:SoundTransform = new SoundTransform(0.1, 0);
 		public var musicChannel:SoundChannel = new SoundChannel;				// needed to control sound beyond the basic .play() command
+		public var effectChannel:SoundChannel = new SoundChannel;
+		public var hitChannel:SoundChannel = new SoundChannel;
 		
 		public var shortCut:Boolean = false;				// variable for triggering the shortcut spawn location when transfering from Mall to School
 		
 		public function GameState()
 		{
-			startScene();
+			//startScene();
 			//homeScene();
 			//suburbScene();
-			//suburbScene2();
+			suburbScene2();
 			//slumScene();
 			//cityScene();
 			//mallScene();

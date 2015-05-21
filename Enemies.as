@@ -65,6 +65,14 @@ package
 				patrolTimer.addEventListener(TimerEvent.TIMER, patrolTimerTick,false,0,true);
 				break;
 				
+				case "hippie":
+				speed = 3;
+				addEventListener(Event.ENTER_FRAME, patrol,false,0,true);
+				patrolTimer = new Timer(2600);
+				patrolTimer.start();
+				patrolTimer.addEventListener(TimerEvent.TIMER, patrolTimerTick,false,0,true);
+				break;
+				
 				case "kid":
 				speed = 1.5;
 				addEventListener(Event.ENTER_FRAME, patrol,false,0,true);

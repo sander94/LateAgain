@@ -18,17 +18,13 @@
 		private var stageRef:Stage;
 		private var key:KeyObject;
 		
-		/*private var introMusic:Sound = new MusicIntro;							// reference to imported music in Flash library
-		private var volume:SoundTransform = new SoundTransform(0.2, 0);			// volume control and panning
-		private var introChannel:SoundChannel = new SoundChannel;				// needed to control sound beyond the basic .play() command*/
-		
 		public function StartScene(passedClass:GameState, stageRef:Stage)
 		{
 			key = new KeyObject(stageRef);
 			_gameState = passedClass;
 			this.stageRef = stageRef;
 			
-			_gameState.volume.volume = 0.1;
+			_gameState.volume.volume = 0.3;
 			_gameState.musicChannel.stop()
 			_gameState.musicChannel = _gameState.introMusic.play(0, 10, _gameState.volume);
 			

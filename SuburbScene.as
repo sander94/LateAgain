@@ -34,7 +34,7 @@ package
 			player.y = 292;
 			addChild(player);
 			
-			gameState.volume.volume = 0.4;
+			gameState.volume.volume = 0.5;
 			gameState.musicChannel.stop()
 			gameState.musicChannel = gameState.stageMusic.play(0, 10, gameState.volume);
 			

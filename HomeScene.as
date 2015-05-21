@@ -24,7 +24,7 @@ package
 			player.y = 84;
 			addChild(player);
 			
-			gameState.volume.volume = 0.6;
+			gameState.volume.volume = 0.5;
 			
 			leaveHome.addEventListener(Event.ENTER_FRAME, sceneChange,false,0,true);//leaveHome not needed to be defined as a varialbe as it is already placed and named in the scene
 		}
