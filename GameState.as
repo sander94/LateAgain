@@ -191,6 +191,11 @@ package
 				removeChild(_schoolScene);
 				_schoolScene = null;
 			}
+			if (_endScene)
+			{
+				removeChild(_endScene);
+				_endScene = null;
+			}
 		}
 	}
 }

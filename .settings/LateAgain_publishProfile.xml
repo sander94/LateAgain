@@ -56,7 +56,7 @@
     <WindowMode>0</WindowMode>
     <DisplayMenu>1</DisplayMenu>
     <DeviceFont>0</DeviceFont>
-    <TemplateFileName>C:\Users\Petri\AppData\Local\Adobe\Flash CS6\en_US\Configuration\HTML\Default.html</TemplateFileName>
+    <TemplateFileName>C:\Users\Tuomasv\AppData\Local\Adobe\Flash CS6\en_US\Configuration\HTML\Default.html</TemplateFileName>
     <showTagWarnMsg>1</showTagWarnMsg>
   </PublishHtmlProperties>
   <PublishFlashProperties enabled="true">
@@ -65,7 +65,7 @@
     <Report>0</Report>
     <Protect>0</Protect>
     <OmitTraceActions>0</OmitTraceActions>
-    <Quality>80</Quality>
+    <Quality>100</Quality>
     <DeblockingFilter>0</DeblockingFilter>
     <StreamFormat>0</StreamFormat>
     <StreamCompress>7</StreamCompress>
@@ -73,7 +73,7 @@
     <EventCompress>7</EventCompress>
     <OverrideSounds>0</OverrideSounds>
     <Version>17</Version>
-    <ExternalPlayer>AdobeAIR3_4</ExternalPlayer>
+    <ExternalPlayer>FlashPlayer11.4</ExternalPlayer>
     <ActionScriptVersion>3</ActionScriptVersion>
     <PackageExportFrame>1</PackageExportFrame>
     <PackagePaths></PackagePaths>

@@ -406,6 +406,7 @@ package
 					restartTextXY();
 					parent.addChild(restartText);
 					
+					speedMult = 1;
 					gameState.curPowerUp = new MovieClip;
 					gameState.heldPowerUp = false;
 					gameState.powerUpTime = 1000;
@@ -519,8 +520,8 @@ package
 			}
 			else
 			{
-				restartText.x = 0;
-				restartText.y = 0;
+				restartText.x = 240;
+				restartText.y = 180;
 			}
 		}
 		

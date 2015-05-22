@@ -18,8 +18,8 @@ package
 			this.stageRef = stageRef;
 			key = new KeyObject(stageRef);
 			gameState = passedClass;
-			
-			scoreboard.text = String(gameState.gameTimeRemaining);
+
+			scoreboard.text = String(Math.floor(gameState.gameTimeRemaining));
 			
 			addEventListener(Event.ENTER_FRAME, mainLoop);
 			addEventListener(Event.ENTER_FRAME, sceneChange);
