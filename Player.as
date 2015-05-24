@@ -47,7 +47,9 @@ package
 		
 		public static var playerAlive:Boolean = true;
 		public static var playerHit:Boolean = false;
-		public var restartText:RestartText;
+		private var textXY:Object;
+		public var resetText:ResetText;
+		public var gameOverText:GameOverText;
 		
 		private var parentClass;
 		private var parentClassWidth:Number;
@@ -105,7 +107,7 @@ package
 		}
 
 		//Hit detection
-		private function hitTestPointHor(e:Event)
+		private function hitTestLeft(e:Event)
 		{
 			if (playerAlive && !playerHit)
 			{
@@ -136,7 +138,15 @@ package
 					{
 						leftCollision = false;
 					}
-					
+				}
+			}
+		}
+		private function hitTestRight(e:Event)
+		{
+			if (playerAlive && !playerHit)
+			{
+				for (var i = 0; i < curScene.objects.length; i++)
+				{
 					if (curScene.objects[i].hitTestObject(hitboxRight))
 					{
 						if (curScene.objects[i].name.indexOf("power") >= 0)
@@ -161,7 +171,7 @@ package
 				}
 			}
 		}
-		private function hitTestPointVer(e:Event)
+		private function hitTestUp(e:Event)
 		{
 			if (playerAlive && !playerHit)
 			{
@@ -188,6 +198,15 @@ package
 					{
 						upCollision = false;
 					}
+				}
+			}
+		}
+		private function hitTestDown(e:Event)
+		{
+			if (playerAlive && !playerHit)
+			{
+				for (var i = 0; i < curScene.objects.length; i++)
+				{
 					
 					if (curScene.objects[i].hitTestObject(hitboxDown))
 					{
@@ -313,8 +332,10 @@ package
 		//Remove EventListeners
 		public function removeEventListeners()
 		{
-			removeEventListener(Event.ENTER_FRAME, hitTestPointHor);
-			removeEventListener(Event.ENTER_FRAME, hitTestPointVer);
+			removeEventListener(Event.ENTER_FRAME, hitTestLeft);
+			removeEventListener(Event.ENTER_FRAME, hitTestRight);
+			removeEventListener(Event.ENTER_FRAME, hitTestUp);
+			removeEventListener(Event.ENTER_FRAME, hitTestDown);
 			removeEventListener(Event.ENTER_FRAME, playerLoop);
 			removeEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
 			this.stageRef.removeChild(userInterface);
@@ -323,8 +344,10 @@ package
 		//Add EventListeners
 		public function addEventListeners()
 		{
-			addEventListener(Event.ENTER_FRAME, hitTestPointHor);
-			addEventListener(Event.ENTER_FRAME, hitTestPointVer);
+			addEventListener(Event.ENTER_FRAME, hitTestLeft);
+			addEventListener(Event.ENTER_FRAME, hitTestRight);
+			addEventListener(Event.ENTER_FRAME, hitTestUp);
+			addEventListener(Event.ENTER_FRAME, hitTestDown);
 			addEventListener(Event.ENTER_FRAME, playerLoop);
 			addEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
 			userInterface = new UI;
@@ -399,12 +422,15 @@ package
 					gameState.effectChannel.stop()
 					gameState.musicChannel.stop()
 					gameState.hitChannel = gameState.deathMusic.play(0, 0, gameState.effectVolume)
-					
+
+					playerAlive = false;
 					removeEventListeners();
 
-					restartText = new RestartText;
-					restartTextXY();
-					parent.addChild(restartText);
+					textXY = getTextXY();
+					gameOverText = new GameOverText;
+					gameOverText.x = textXY.posX;
+					gameOverText.y = textXY.posY;
+					parent.addChild(gameOverText);
 					
 					speedMult = 1;
 					gameState.curPowerUp = new MovieClip;
@@ -413,7 +439,6 @@ package
 					gameState.powerUpActive = false;
 					gameState.currentStamina = gameState.maxStamina;
 					gameState.cooldown = false;
-					playerAlive = false;
 				}
 				//Othervise reset player and give time penalty
 				else
@@ -422,13 +447,17 @@ package
 					gameState.hitChannel = gameState.hitEffect.play(0, 0, gameState.effectVolume)
 					
 					removeEventListener(Event.ENTER_FRAME, playerLoop);
-					removeEventListener(Event.ENTER_FRAME, hitTestPointHor);
-					removeEventListener(Event.ENTER_FRAME, hitTestPointVer);
+					removeEventListener(Event.ENTER_FRAME, hitTestLeft);
+					removeEventListener(Event.ENTER_FRAME, hitTestRight);
+					removeEventListener(Event.ENTER_FRAME, hitTestUp);
+					removeEventListener(Event.ENTER_FRAME, hitTestDown);
 					removeEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
 					
-					restartText = new RestartText;
-					restartTextXY();
-					parent.addChild(restartText);
+					textXY = getTextXY();
+					resetText = new ResetText;
+					resetText.x = textXY.posX;
+					resetText.y = textXY.posY;
+					parent.addChild(resetText);
 
 					playerHit = true;
 				}
@@ -449,8 +478,10 @@ package
 			{
 				removeEventListener(Event.ENTER_FRAME, playerDown);
 
-				addEventListener(Event.ENTER_FRAME, hitTestPointHor);
-				addEventListener(Event.ENTER_FRAME, hitTestPointVer);
+				addEventListener(Event.ENTER_FRAME, hitTestLeft);
+				addEventListener(Event.ENTER_FRAME, hitTestRight);
+				addEventListener(Event.ENTER_FRAME, hitTestUp);
+				addEventListener(Event.ENTER_FRAME, hitTestDown);
 				addEventListener(Event.ENTER_FRAME, playerLoop);
 				addEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
 
@@ -461,90 +492,103 @@ package
 
 				playerHit = false;
 
-				parent.removeChild(restartText);
+				parent.removeChild(resetText);
 			}
 		}
 
 		//X and Y coordinates for restart text
-		private function restartTextXY()
+		private function getTextXY()
 		{
 			if (parentClassHeight > 363 && parentClassWidth > 483)
 			{
 				switch (getXY())
 				{
 					case "middle":
-					restartText.x = x;
-					restartText.y = y;
+					//resetText.x = x;
+					//resetText.y = y;
+					return {posX: x, posY: y};
 					break;
 
 					case "top left":
-					restartText.x = leftX + 240;
-					restartText.y = topY + 180;
+					//resetText.x = leftX + 240;
+					//resetText.y = topY + 180;
+					return {posX: leftX + 240, posY: topY + 180};
 					break;
 
 					case "bottom left":
-					restartText.x = leftX + 240;
-					restartText.y = bottomY - 180;
+					//resetText.x = leftX + 240;
+					//resetText.y = bottomY - 180;
+					return {posX: leftX + 240, posY: bottomY - 180};
 					break;
 					
 					case "top right":
-					restartText.x = rightX - 240;
-					restartText.y = topY + 180;
+					//resetText.x = rightX - 240;
+					//resetText.y = topY + 180;
+					return {posX: rightX - 240, posY: topY + 180};
 					break;
 					
 					case "bottom right":
-					restartText.x = rightX - 240;
-					restartText.y = bottomY - 180;
+					//resetText.x = rightX - 240;
+					//resetText.y = bottomY - 180;
+					return {posX: rightX - 240, posY: bottomY - 180};
 					break;
 
 					case "left":
-					restartText.x = leftX + 240;
-					restartText.y = y;
+					//resetText.x = leftX + 240;
+					//resetText.y = y;
+					return {posX: leftX + 240, posY: y};
 					break;
 					
 					case "right":
-					restartText.x = rightX - 240;
-					restartText.y = y;
+					//resetText.x = rightX - 240;
+					//resetText.y = y;
+					return {posX: rightX - 240, posY: y};
 					break;
 					
 					case "top":
-					restartText.x = x;
-					restartText.y = topY + 180;
+					//resetText.x = x;
+					//resetText.y = topY + 180;
+					return {posX: x, posY: topY + 180};
 					break;
 					
 					case "bottom":
-					restartText.x = x;
-					restartText.y = bottomY - 180;
+					//resetText.x = x;
+					//resetText.y = bottomY - 180;
+					return {posX: x, posY: bottomY - 180};
 					break;
 				}
 			}
 			else
 			{
-				restartText.x = 240;
-				restartText.y = 180;
+				//resetText.x = 240;
+				//resetText.y = 180;
+				return {posX: 240, posY: 180};
 			}
 		}
 		
 		//Pick up powerup
 		private function pickedUpPowerUp(pickedUp)
 		{
-			if (!gameState.powerUpActive)
+			if (pickedUp.parent.name != "powerUpFrame")
 			{
-				gameState.effectVolume.volume = 0.1;
-				gameState.effectChannel = gameState.pickUpPowerUp.play(0, 0, gameState.effectVolume)
-				
-				if (gameState.heldPowerUp)
+				if (!gameState.powerUpActive)
 				{
-					userInterface.powerUpFrame.removeChild(gameState.curPowerUp);
+					gameState.effectVolume.volume = 0.1;
+					gameState.effectChannel = gameState.pickUpPowerUp.play(0, 0, gameState.effectVolume)
+					
+					if (gameState.heldPowerUp)
+					{
+						userInterface.powerUpFrame.removeChild(gameState.curPowerUp);
+					}
+					
+					gameState.curPowerUp = pickedUp;
+					gameState.curPowerUp.x = 0;
+					gameState.curPowerUp.y = 0;
+					parent.removeChild(pickedUp);
+					gameState.heldPowerUp = true;
+					trace("Holding " + gameState.curPowerUp.name);
+					userInterface.powerUpFrame.addChild(gameState.curPowerUp);
 				}
-				
-				gameState.curPowerUp = pickedUp;
-				gameState.curPowerUp.x = 0;
-				gameState.curPowerUp.y = 0;
-				parent.removeChild(pickedUp);
-				gameState.heldPowerUp = true;
-				trace("Holding " + gameState.curPowerUp.name);
-				userInterface.powerUpFrame.addChild(gameState.curPowerUp);
 			}
 		}
 		
@@ -754,9 +798,11 @@ package
 					addEventListener(Event.ENTER_FRAME, playerDown);
 					removeEventListeners();
 
-					restartText = new RestartText;
-					restartTextXY();
-					parent.addChild(restartText);
+					textXY = getTextXY();
+					gameOverText = new GameOverText;
+					gameOverText.x = textXY.posX;
+					gameOverText.y = textXY.posY;
+					parent.addChild(gameOverText);
 				}
 			}
 		}

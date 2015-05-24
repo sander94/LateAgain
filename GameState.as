@@ -73,7 +73,7 @@ package
 		{
 			gameTimer.stop();
 			gameTimer = new Timer(1000);
-			gameTimeRemaining = 180; //set time remaining here
+			gameTimeRemaining = 200; //set time remaining here
 			gameTimer.removeEventListener(TimerEvent.TIMER, gameTimerTick)
 			removeScene();
 			_startScene = new StartScene(this, stage);
@@ -87,7 +87,6 @@ package
 			addChild(_homeScene);
 
 			Player.userInterface.timeRemaining.text = String(Math.ceil(gameTimeRemaining));
-			gameTimer.start();
 			gameTimer.addEventListener(TimerEvent.TIMER, gameTimerTick);
 		}
 		
@@ -97,6 +96,7 @@ package
 			_suburbScene = new SuburbScene(this, stage);
 			addChild(_suburbScene);
 
+			gameTimer.start();
 			Player.userInterface.timeRemaining.text = String(Math.ceil(gameTimeRemaining));
 		}
 		
