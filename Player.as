@@ -236,7 +236,7 @@ package
 		//Camera code
 		private function cameraFollowPlayer(e:Event)
 		{
-			if (parentClassHeight > 363 && parentClassWidth > 483)
+			if (parentClassHeight > 370 && parentClassWidth > 490)
 			{
 				switch (getXY())
 				{
