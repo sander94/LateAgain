@@ -486,6 +486,7 @@ package
 				addEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
 
 				gameState.gameTimeRemaining -= 10; //Time penalty for being hit
+				userInterface.timeRemaining.text = String(Math.ceil(gameState.gameTimeRemaining));
 
 				x = startX;
 				y = startY;
