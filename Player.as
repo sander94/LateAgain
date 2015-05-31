@@ -452,6 +452,9 @@ package
 					removeEventListener(Event.ENTER_FRAME, hitTestUp);
 					removeEventListener(Event.ENTER_FRAME, hitTestDown);
 					removeEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
+
+					gameState.gameTimeRemaining -= 10; //Time penalty for being hit
+					userInterface.timeRemaining.text = String(Math.ceil(gameState.gameTimeRemaining));
 					
 					textXY = getTextXY();
 					resetText = new ResetText;
@@ -484,9 +487,6 @@ package
 				addEventListener(Event.ENTER_FRAME, hitTestDown);
 				addEventListener(Event.ENTER_FRAME, playerLoop);
 				addEventListener(Event.ENTER_FRAME, cameraFollowPlayer);
-
-				gameState.gameTimeRemaining -= 10; //Time penalty for being hit
-				userInterface.timeRemaining.text = String(Math.ceil(gameState.gameTimeRemaining));
 
 				x = startX;
 				y = startY;

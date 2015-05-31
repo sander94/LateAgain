@@ -19,9 +19,9 @@ package
 			objects = new Array();
 			addObjects();
 
-			player = new Player(gameState, stageRef, HomeScene, this, 374, 84);
-			player.x = 374;
-			player.y = 84;
+			player = new Player(gameState, stageRef, HomeScene, this, 386, 69);
+			player.x = 386;
+			player.y = 69;
 			addChild(player);
 			
 			gameState.volume.volume = 0.5;
